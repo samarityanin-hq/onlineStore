@@ -1,0 +1,58 @@
+package Entities;
+
+
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+
+@Table(name = "Products")
+@Entity
+public class Product {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "storage_quantity")
+    private Integer storageQuantity;
+
+    public Product(){}
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Integer getStorageQuantity() {
+        return storageQuantity;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setStorageQuantity(Integer storageQuantity) {
+        this.storageQuantity = storageQuantity;
+    }
+}
