@@ -1,4 +1,4 @@
-package Repositories;
+package main.store.Repositories;
 
 public enum Status {
     CREATED("CREATED"),

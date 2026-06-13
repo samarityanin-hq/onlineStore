@@ -1,13 +1,13 @@
-package Entities;
+package main.store.Entities;
 
 
-import Repositories.Status;
+import main.store.Repositories.Status;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Table(name = "Orders")
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +20,7 @@ public class Order {
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;
+
+
 
 }

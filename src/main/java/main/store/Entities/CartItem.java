@@ -1,10 +1,12 @@
-package Entities;
+package main.store.Entities;
 
 
 import jakarta.persistence.*;
 
-@Table(name = "Cart_items")
+import java.math.BigDecimal;
+
 @Entity
+@Table(name = "cart_items")
 public class CartItem {
     @Id
     @Column(name = "id")
@@ -23,6 +25,53 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer itemQuantity;
 
+    @Column(name = "position_cost")
+    private BigDecimal positionCost;
 
+    public CartItem(){}
+    public CartItem(User user, Product item, Integer itemQuantity){
+        this.user = user;
+        this.item = item;
+        this.itemQuantity = itemQuantity;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Product getItem() {
+        return item;
+    }
+
+    public Integer getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public BigDecimal getPositionCost() {
+        return positionCost;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setItem(Product item) {
+        this.item = item;
+    }
+
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
+
+    public void setPositionCost(BigDecimal positionCost) {
+        this.positionCost = positionCost;
+    }
 }

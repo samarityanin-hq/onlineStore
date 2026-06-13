@@ -1,4 +1,7 @@
 package main.store.DTOs;
 
-public record ProductOut() {
-}
+import java.math.BigDecimal;
+
+public record ProductOut(String title,
+                         BigDecimal price,
+                         int quantity){}

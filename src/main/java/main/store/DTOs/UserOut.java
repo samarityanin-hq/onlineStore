@@ -1,6 +1,5 @@
-package DTOs;
-
-import Repositories.UserRepo;
+package main.store.DTOs;
 
 public record UserOut(String name,
-                      String email){}
+                      String email,
+                      int cartItems){}

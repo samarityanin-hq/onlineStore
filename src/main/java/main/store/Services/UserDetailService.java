@@ -1,4 +1,40 @@
 package main.store.Services;
 
-public class UserDetailService {
+import main.store.Entities.User;
+import main.store.Repositories.UserRepo;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+
+import java.util.Collections;
+
+@Service
+public class UserDetailService implements UserDetailsService {
+
+    private final UserRepo userRepo;
+
+    public UserDetailService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepo.findUserByEmail(email);
+
+        if (user == null){
+            throw new UsernameNotFoundException("User with email: " + email + " not found");
+        }
+
+        String password = new String(user.getPasswordHash());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                password,
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
+        );
+
+    }
 }

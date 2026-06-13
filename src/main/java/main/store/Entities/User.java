@@ -1,30 +1,33 @@
-package Entities;
+package main.store.Entities;
 
-import DTOs.UserRegistration;
+import main.store.DTOs.UserRegistration;
 import jakarta.persistence.*;
+import main.store.Repositories.UserRole;
 
-@Entity()
-@Table(name = "Users")
+@Entity
+@Table(name = "users")
 public class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(unique = true ,name = "name")
     private String name;
 
-    @Column(name = "email")
+    @Column(unique = true,name = "email")
     private String email;
 
     @Column(name = "password_hash")
     private char[] passwordHash;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     public User(){}
     public User(UserRegistration newUser){
         name = newUser.name();
         email = newUser.email();
-        passwordHash = newUser.password();
     }
 
     public long getId() {
@@ -43,7 +46,7 @@ public class User {
         return passwordHash;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,5 +60,13 @@ public class User {
 
     public void setPasswordHash(char[] passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

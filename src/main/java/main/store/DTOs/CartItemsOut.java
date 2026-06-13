@@ -1,8 +1,7 @@
-package DTOs;
+package main.store.DTOs;
 
-import Entities.CartItem;
-
+import java.math.BigDecimal;
 import java.util.List;
 
 public record CartItemsOut(List<ItemOut> items,
-                           double totalPrice){}
+                           BigDecimal totalPrice){}

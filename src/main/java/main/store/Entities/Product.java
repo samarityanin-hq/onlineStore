@@ -1,12 +1,12 @@
-package Entities;
+package main.store.Entities;
 
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Table(name = "Products")
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @Column(name = "id")
