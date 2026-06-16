@@ -1,6 +1,7 @@
 package main.store.Services;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import main.store.DTOs.ProductOut;
 import main.store.Entities.Product;
 import main.store.Repositories.ProductRepo;
@@ -23,7 +24,7 @@ public class ProductService {
         Product product = productRepo.findProductByTitle(title);
 
         if (product == null){
-            throw new EntityExistsException("Product not found");
+            throw new EntityNotFoundException("Product not found");
         }
 
         return convertToProductOut(product);
