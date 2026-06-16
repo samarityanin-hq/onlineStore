@@ -33,7 +33,19 @@ public class CartItem {
         this.user = user;
         this.item = item;
         this.itemQuantity = itemQuantity;
+        this.positionCost = item.getPrice();
     }
+
+    private void calculatePositionCost(){
+        if (this.item != null && this.itemQuantity != null){
+            positionCost = item.getPrice().multiply(BigDecimal.valueOf(itemQuantity));
+        }
+        else {
+            positionCost = BigDecimal.ZERO;
+        }
+    }
+
+
 
     public Long getId() {
         return id;
@@ -65,10 +77,12 @@ public class CartItem {
 
     public void setItem(Product item) {
         this.item = item;
+        calculatePositionCost();
     }
 
     public void setItemQuantity(Integer itemQuantity) {
         this.itemQuantity = itemQuantity;
+        calculatePositionCost();
     }
 
     public void setPositionCost(BigDecimal positionCost) {

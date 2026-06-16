@@ -1,21 +1,17 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import main.store.DTOs.UserAuth;
 import main.store.DTOs.UserOut;
 import main.store.DTOs.UserRegistration;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
 import main.store.Repositories.UserRole;
-import main.store.Security.SecurityConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Arrays;
 
 @Service
 public class UserService {
@@ -31,7 +27,7 @@ public class UserService {
     }
 
     public UserOut createUser(@Valid UserRegistration user) {
-        if (userRepo.findUserByEmail(user.email()) != null || userRepo.findUserByName(user.name()) != null){
+        if (userRepo.findByEmail(user.email()) != null || userRepo.findUserByName(user.name()) != null){
             throw new EntityNotFoundException("User is already exists");
         }
 
@@ -47,11 +43,9 @@ public class UserService {
 
     public UserOut getCurrentUser(Principal principal){
         String email = principal.getName();
-        User user = userRepo.findUserByEmail(email);
+        User user = userRepo.findByEmail(email);
 
         return convertToUserOut(user);
-
-
     }
 
 
