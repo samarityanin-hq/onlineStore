@@ -1,5 +1,6 @@
 package main.store.Services;
 
+import main.store.Entities.CustomUserDetails;
 import main.store.Entities.User;
 import main.store.Repositories.UserRepo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,11 +29,9 @@ public class UserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User with email: " + email + " not found");
         }
 
-        String password = new String(user.getPasswordHash());
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                password,
+        return new CustomUserDetails(
+                user,
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
         );
 
