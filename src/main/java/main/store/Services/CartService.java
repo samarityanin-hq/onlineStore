@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
@@ -100,7 +101,7 @@ public class CartService {
         return new CartItemsOut(items
                 .stream()
                 .map(this::convertToItemOut)
-                .toList(), cartRepo.calculateCartCost(user.getId()));
+                .toList(), cartCost);
     }
 
     private CartItem findCartItem(String productTitle, Principal principal){

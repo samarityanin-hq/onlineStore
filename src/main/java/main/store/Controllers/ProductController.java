@@ -21,7 +21,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-
     @GetMapping("/{title}")
     public ResponseEntity<ProductOut> getProduct(
             @PathVariable String title){

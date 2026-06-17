@@ -22,7 +22,14 @@ public class Product {
     @Column(name = "storage_quantity")
     private Integer storageQuantity;
 
+    @ManyToOne
+    @JoinColumn(name = "category")
+    private Category category;
+
     public Product(){}
+    public Product(Category category){
+        this.category = category;
+    }
 
     public Long getId() {
         return id;

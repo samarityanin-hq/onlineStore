@@ -1,6 +1,7 @@
 package main.store.Entities;
 
 
+/*
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -21,3 +22,4 @@ public class CustomUserDetails extends org.springframework.security.core.userdet
         return userId;
     }
 }
+*/

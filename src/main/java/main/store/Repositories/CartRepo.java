@@ -20,7 +20,7 @@ public interface CartRepo extends JpaRepository<CartItem, Long> {
     @Query("DELETE FROM CartItem c WHERE c.user.id = :userId")
     void deleteAllByUser_Id(@Param("userId") Long userId);
 
-    @Query("SELECT SUM(c.item.price * c.itemQuantity) FROM CartItem c WHERE c.user.id = :userId")
-    BigDecimal calculateCartCost(@Param("userId") Long userId);
+    /*@Query("SELECT SUM(c.item.price * c.itemQuantity) FROM CartItem c WHERE c.user.id = :userId")
+    BigDecimal calculateCartCost(@Param("userId") Long userId);*/
 
 }
