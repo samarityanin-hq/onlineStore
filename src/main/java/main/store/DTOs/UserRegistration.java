@@ -1,8 +1,11 @@
 package main.store.DTOs;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record UserRegistration(@NotNull String name,
-                               @NotNull String email,
-                               @NotNull char[] password) {
+public record UserRegistration(
+        @NotBlank(message = "Name field cannot be empty")
+        String name,
+        @NotBlank(message = "Email field cannot be empty")
+        String email,
+        char[] password) {
 }

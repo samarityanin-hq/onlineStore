@@ -1,6 +1,5 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import main.store.DTOs.ProductOut;
 import main.store.Entities.Product;

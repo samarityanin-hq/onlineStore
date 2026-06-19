@@ -1,25 +1,44 @@
 package main.store.Entities;
 
-
-/*
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
-public class CustomUserDetails extends org.springframework.security.core.userdetails.User {
+public class CustomUserDetails implements UserDetails {
 
-    private final Long userId;
-
+    private final User user;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getName(), Arrays.toString(user.getPasswordHash()), authorities);
-        userId = user.getId();
+        this.user = user;
+        this.authorities = authorities;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getRealName(){
+        return user.getName();
+    }
+
+    public Long getId(){
+        return user.getId();
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+        return new String(user.getPasswordHash());
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getEmail();
     }
 }
-*/

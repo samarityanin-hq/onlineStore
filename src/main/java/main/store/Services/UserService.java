@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Arrays;
 
 @Service
 public class UserService {
@@ -33,7 +34,7 @@ public class UserService {
 
         User newUser = new User(user);
         newUser.setRole(UserRole.ROLE_USER);
-        String hashedPassword = passwordEncoder.encode(new String(user.password()));
+        String hashedPassword = passwordEncoder.encode(Arrays.toString(user.password()));
         newUser.setPasswordHash(hashedPassword.toCharArray());
 
         userRepo.save(newUser);
