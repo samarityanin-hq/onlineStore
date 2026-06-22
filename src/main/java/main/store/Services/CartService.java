@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import main.store.DTOs.CartItemsOut;
 import main.store.DTOs.ItemOut;
 import main.store.Entities.CartItem;
+import main.store.Entities.CustomUserDetails;
 import main.store.Entities.Product;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
@@ -21,8 +22,6 @@ import java.util.List;
 @Service
 public class CartService {
 
-    private static final Logger log = LoggerFactory.getLogger(CartService.class);
-
     private final CartRepo cartRepo;
     private final UserRepo userRepo;
     private final ProductRepo productRepo;
@@ -34,16 +33,17 @@ public class CartService {
     }
 
     @Transactional
-    public void addToCart(String productTitle, Principal principal) {
-        String email = principal.getName();
+    public void addToCart(String productTitle, CustomUserDetails userDetails) {
 
         Product product = productRepo.findProductByTitle(productTitle);
         if (product == null){
             throw new EntityNotFoundException("Product not found");
         }
 
-        User user = userRepo.findByEmail(email);
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Id(user.getId(), product.getId());
+        User user = userRepo.findByEmail(userDetails.getUsername());
+        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(user.getId(), productTitle)
+                .orElseThrow(()-> new EntityNotFoundException("No such product in your cart"));
+
         if (cartItem == null){
             cartItem = new CartItem(user, product, 1);
             cartRepo.save(cartItem);
@@ -56,20 +56,20 @@ public class CartService {
     }
 
 
-    public CartItemsOut showCartItems(Principal principal) {
-        return cartItemsOut(principal.getName());
+    public CartItemsOut showCartItems(CustomUserDetails userDetails) {
+        return cartItemsOut(userDetails);
     }
 
     @Transactional
-    public CartItemsOut clear(Principal principal) {
-        cartRepo.deleteAllByUser_Id(userRepo.findByEmail(principal.getName()).getId());
-        return cartItemsOut(principal.getName());
+    public CartItemsOut clear(CustomUserDetails userDetails) {
+        cartRepo.deleteAllByUser_Id(userDetails.getId());
+        return cartItemsOut(userDetails);
     }
 
     @Transactional
-    public CartItemsOut decrementCartPosition(String productTitle, Principal principal) {
+    public CartItemsOut decrementCartPosition(String productTitle, CustomUserDetails userDetails) {
 
-        CartItem cartItem = findCartItem(productTitle, principal);
+        CartItem cartItem = findCartItem(productTitle, userDetails);
 
         if (cartItem.getItemQuantity() > 1){
             cartItem.setItemQuantity(cartItem.getItemQuantity()-1);
@@ -78,54 +78,34 @@ public class CartService {
             cartRepo.delete(cartItem);
         }
 
-        return cartItemsOut(principal.getName());
+        return cartItemsOut(userDetails);
     }
 
     @Transactional
-    public CartItemsOut deleteCartPosition(String productTitle, Principal principal){
+    public CartItemsOut deleteCartPosition(String productTitle, CustomUserDetails userDetails){
 
-        cartRepo.delete(findCartItem(productTitle, principal));
+        cartRepo.delete(findCartItem(productTitle, userDetails));
 
-        return cartItemsOut(principal.getName());
+        return cartItemsOut(userDetails);
     }
 
-    private CartItemsOut cartItemsOut(String email){
-        User user = userRepo.findByEmail(email);
+    private CartItemsOut cartItemsOut(CustomUserDetails userDetails){
 
-        List<CartItem> items = cartRepo.findByUserId(user.getId());
+        List<ItemOut> items = cartRepo.findDTO(userDetails.getId());
 
         BigDecimal cartCost = items.stream()
-                .map(CartItem :: getPositionCost)
+                .map(ItemOut :: totalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new CartItemsOut(items
-                .stream()
-                .map(this::convertToItemOut)
-                .toList(), cartCost);
+        return new CartItemsOut(items, cartCost);
     }
 
-    private CartItem findCartItem(String productTitle, Principal principal){
-        User user = userRepo.findByEmail(principal.getName());
+    private CartItem findCartItem(String productTitle, CustomUserDetails userDetails){
 
-        Product product = productRepo.findProductByTitle(productTitle);
-        if (product == null){
-            throw new EntityNotFoundException("cannot find product to delete");
-        }
-
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Id(user.getId(), product.getId());
-
-        if (cartItem == null){
-            throw new EntityNotFoundException("this product not in your cart");
-        }
+        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(userDetails.getId(), productTitle)
+                .orElseThrow(()-> new EntityNotFoundException("No such product in your cart"));;
 
         return cartItem;
-    }
-
-
-    private ItemOut convertToItemOut(CartItem item){
-        return new ItemOut(item.getItem().getTitle(),
-                item.getItemQuantity(),
-                item.getPositionCost());
     }
 
 }

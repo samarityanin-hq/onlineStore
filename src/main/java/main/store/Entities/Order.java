@@ -25,6 +25,13 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    public Order(){}
+    public Order(User user, Status status, BigDecimal totalPrice){
+        this.user = user;
+        this.status = status;
+        this.totalPrice = totalPrice;
+    }
+
     public Long getId() {
         return id;
     }

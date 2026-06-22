@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import main.store.DTOs.UserOut;
 import main.store.DTOs.UserRegistration;
+import main.store.Entities.CustomUserDetails;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
@@ -34,7 +35,7 @@ public class UserService {
 
         User newUser = new User(user);
         newUser.setRole(UserRole.ROLE_USER);
-        String hashedPassword = passwordEncoder.encode(Arrays.toString(user.password()));
+        String hashedPassword = passwordEncoder.encode(new String(user.password()));
         newUser.setPasswordHash(hashedPassword.toCharArray());
 
         userRepo.save(newUser);
@@ -42,17 +43,15 @@ public class UserService {
         return convertToUserOut(newUser);
     }
 
-    public UserOut getCurrentUser(Principal principal){
-        String email = principal.getName();
-        User user = userRepo.findByEmail(email);
-
+    public UserOut getCurrentUser(CustomUserDetails userDetails){
+        User user = userRepo.findByEmail(userDetails.getUsername());
         return convertToUserOut(user);
     }
 
 
 
     private UserOut convertToUserOut(User user){
-        int cartProductCount = cartRepo.findByUserId(user.getId()).size();
+        int cartProductCount = cartRepo.findDTO(user.getId()).size();
 
         return new UserOut(user.getName(), user.getEmail(), cartProductCount);
     }

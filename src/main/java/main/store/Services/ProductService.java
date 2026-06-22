@@ -2,12 +2,12 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import main.store.DTOs.ProductOut;
-import main.store.Entities.Product;
 import main.store.Repositories.ProductRepo;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -20,29 +20,14 @@ public class ProductService {
 
     @Cacheable(value = "products", key = "#title")
     public ProductOut getProduct(String title){
-        Product product = productRepo.findProductByTitle(title);
 
-        if (product == null){
-            throw new EntityNotFoundException("Product not found");
-        }
-
-        return convertToProductOut(product);
+        return productRepo
+                .findProductDTO(title)
+                .orElseThrow(() -> new EntityNotFoundException("Product with title %s doesnt exist".formatted(title)));
     }
 
-    @Cacheable(value = "catalog", key = "{}")
-    public List<ProductOut> getProductsCatalog(){
-        List<Product> catalog = productRepo.findAll();
-
-        return catalog.stream()
-                .map(this::convertToProductOut)
-                .toList();
-    }
-
-
-    private ProductOut convertToProductOut(Product product){
-        return new ProductOut(product.getTitle(),
-                product.getPrice(),
-                product.getStorageQuantity());
+    public Page<ProductOut> getProductsCatalog(Pageable pageable){
+        return productRepo.findDTOList(pageable);
     }
 
 }

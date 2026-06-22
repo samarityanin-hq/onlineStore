@@ -45,8 +45,6 @@ public class CartItem {
         }
     }
 
-
-
     public Long getId() {
         return id;
     }

@@ -14,8 +14,7 @@ public record ProductToAdd(
         BigDecimal price,
         @Positive(message = "quantity cant be negative")
         @NotNull(message = "empty field quantity for product")
-        Integer quantity
-
-
+        Integer quantity,
+        Long categoryId
 ) {
 }

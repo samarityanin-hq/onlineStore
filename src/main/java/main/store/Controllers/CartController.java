@@ -1,11 +1,13 @@
 package main.store.Controllers;
 
 import main.store.DTOs.CartItemsOut;
+import main.store.Entities.CustomUserDetails;
 import main.store.Services.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,9 +28,9 @@ public class CartController {
     @PostMapping("/add")
     public ResponseEntity<Void> addCartItem(
             @RequestParam String productTitle,
-            Principal principal
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        cartService.addToCart(productTitle, principal);
+        cartService.addToCart(productTitle, userDetails);
         log.info("called method addCartItem");
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -36,43 +38,46 @@ public class CartController {
     }
 
     @GetMapping("/showCartItems")
-    public ResponseEntity<CartItemsOut> showCartItems(Principal principal) {
+    public ResponseEntity<CartItemsOut> showCartItems(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         log.info("called method showCartItems");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.showCartItems(principal));
+                .body(cartService.showCartItems(userDetails));
 
     }
 
     @DeleteMapping("/clear")
-    public ResponseEntity<CartItemsOut> clearCart(Principal principal) {
+    public ResponseEntity<CartItemsOut> clearCart(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
         log.info("called method clearCart");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.clear(principal));
+                .body(cartService.clear(userDetails));
     }
 
     @DeleteMapping("/decrement")
     public ResponseEntity<CartItemsOut> decrementCartPosition(
             @RequestParam String productTitle,
-            Principal principal
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         log.info("called method decrementCartPosition");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.decrementCartPosition(productTitle, principal));
+                .body(cartService.decrementCartPosition(productTitle, userDetails));
     }
 
     @DeleteMapping("/deletePosition")
     public ResponseEntity<CartItemsOut> deleteCartPosition(
             @RequestParam String productTitle,
-            Principal principal
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         log.info("called method deleteCartPosition");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.deleteCartPosition(productTitle, principal));
+                .body(cartService.deleteCartPosition(productTitle, userDetails));
     }
 
 }

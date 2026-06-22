@@ -4,6 +4,10 @@ import main.store.DTOs.ProductOut;
 import main.store.Services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +21,7 @@ public class ProductController {
     private final ProductService productService;
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService){
         this.productService = productService;
     }
 
@@ -32,11 +36,13 @@ public class ProductController {
     }
 
     @GetMapping("/catalog")
-    public ResponseEntity<List<ProductOut>> getCatalog(){
+    public ResponseEntity<Page<ProductOut>> getCatalog(
+            Pageable pageable
+    ){
         log.info("called method getCatalog");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.getProductsCatalog());
+                .body(productService.getProductsCatalog(pageable));
     }
 
 

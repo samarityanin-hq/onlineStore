@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CategoryRepo extends JpaRepository<Category, Long> {
-    @Query("SELECT c FROM Category c")
-    List<Category> getAll();
 }

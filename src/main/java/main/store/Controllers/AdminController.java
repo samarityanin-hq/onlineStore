@@ -3,6 +3,7 @@ package main.store.Controllers;
 import jakarta.validation.Valid;
 import main.store.DTOs.CategoryList;
 import main.store.DTOs.ProductOut;
+import main.store.DTOs.ProductToAdd;
 import main.store.Services.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +32,14 @@ public class AdminController {
 
     @PostMapping("/addProduct/createProduct")
     public ResponseEntity<Void> addProduct(
-            @Valid @RequestBody ProductOut productOut){
+            @Valid @RequestBody ProductToAdd product){
         log.info("called admin method addProduct");
-        adminService.addProduct(productOut);
+        adminService.addProduct(product);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
 
     }
+
+
 }

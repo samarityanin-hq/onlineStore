@@ -2,6 +2,7 @@ package main.store.Entities;
 
 
 import jakarta.persistence.*;
+import main.store.DTOs.ProductToAdd;
 
 import java.math.BigDecimal;
 
@@ -27,8 +28,12 @@ public class Product {
     private Category category;
 
     public Product(){}
-    public Product(Category category){
+    public Product(ProductToAdd product, Category category){
+        title = product.title();
+        price = product.price();
+        storageQuantity = product.quantity();
         this.category = category;
+
     }
 
     public Long getId() {

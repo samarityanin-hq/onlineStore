@@ -1,11 +1,13 @@
 package main.store.Controllers;
 
 import main.store.DTOs.UserOut;
+import main.store.Entities.CustomUserDetails;
 import main.store.Services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,12 +26,13 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserOut> getCurrentUser(Principal principal){
+    public ResponseEntity<UserOut> getCurrentUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails){
 
         log.info("called method getCurrentUser");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getCurrentUser(principal));
+                .body(userService.getCurrentUser(userDetails));
     }
 
 }

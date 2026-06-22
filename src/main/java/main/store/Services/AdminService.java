@@ -3,6 +3,7 @@ package main.store.Services;
 import main.store.DTOs.CategoryList;
 import main.store.DTOs.CategoryOut;
 import main.store.DTOs.ProductOut;
+import main.store.DTOs.ProductToAdd;
 import main.store.Entities.Category;
 import main.store.Entities.Product;
 import main.store.Repositories.CategoryRepo;
@@ -29,18 +30,19 @@ public class AdminService {
     }
 
 
-    public void addProduct(ProductOut productOut){
-        //Product newProduct = new Product()
+    public void addProduct(ProductToAdd product){
+        Category category = categoryRepo.getReferenceById(product.categoryId());
+        Product newProduct = new Product(product, category);
+        productRepo.save(newProduct);
     }
 
     public CategoryList getCategories() {
-        List<Category> categories = categoryRepo.getAll();
+        List<Category> categories = categoryRepo.findAll();
         
         return new CategoryList(categories
                 .stream()
                 .map(this::convertToCategoryOut)
                 .toList());
-
     }
 
     private CategoryOut convertToCategoryOut(Category category){
