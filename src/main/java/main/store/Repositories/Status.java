@@ -3,10 +3,7 @@ package main.store.Repositories;
 public enum Status {
     CREATED("CREATED"),
     PAID("PAID"),
-    DELIVERED("DELIVERED"),
-    CANCELED("CANCELED"),
-    REFUNDED("REFUNDED");
-
+    CANCELED("CANCELED");
 
     private final String status;
 

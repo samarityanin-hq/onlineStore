@@ -40,9 +40,8 @@ public class CartService {
             throw new EntityNotFoundException("Product not found");
         }
 
-        User user = userRepo.findByEmail(userDetails.getUsername());
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(user.getId(), productTitle)
-                .orElseThrow(()-> new EntityNotFoundException("No such product in your cart"));
+        User user = userRepo.getReferenceById(userDetails.getId());
+        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(user.getId(), productTitle);
 
         if (cartItem == null){
             cartItem = new CartItem(user, product, 1);
@@ -102,8 +101,11 @@ public class CartService {
 
     private CartItem findCartItem(String productTitle, CustomUserDetails userDetails){
 
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(userDetails.getId(), productTitle)
-                .orElseThrow(()-> new EntityNotFoundException("No such product in your cart"));;
+        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(userDetails.getId(), productTitle);
+        if (cartItem == null){
+            throw new EntityNotFoundException("No such product in your cart");
+        }
+
 
         return cartItem;
     }

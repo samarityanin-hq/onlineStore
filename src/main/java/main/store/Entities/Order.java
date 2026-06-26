@@ -1,12 +1,16 @@
 package main.store.Entities;
 
-
+import lombok.Getter;
+import lombok.Setter;
 import main.store.Repositories.Status;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "orders")
 public class Order {
     @Id
@@ -25,42 +29,23 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @Column(name = "total_orderItems")
+    private Integer totalOrderItems;
+
+    @Column(name = "created_at")
+    LocalDateTime dateTime;
+
+    @Column(name = "paid_at")
+    LocalDateTime payDate;
+
     public Order(){}
-    public Order(User user, Status status, BigDecimal totalPrice){
+    public Order(User user, Status status, BigDecimal totalPrice, Integer totalOrderItems){
         this.user = user;
         this.status = status;
         this.totalPrice = totalPrice;
+        this.totalOrderItems = totalOrderItems;
+        this.dateTime = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public User getUser() {
-        return user;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 }

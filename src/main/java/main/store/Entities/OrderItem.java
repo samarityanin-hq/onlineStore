@@ -13,8 +13,8 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -26,21 +26,32 @@ public class OrderItem {
     @Column(name = "price_at_purchase")
     private BigDecimal priceAtPurchase;
 
+    @Column(name = "position_cost")
+    private BigDecimal positionCost;
+
     public OrderItem(){}
-    public OrderItem(User user, Product item, Integer itemQuantity, BigDecimal priceAtPurchase){
-        this.user = user;
+    public OrderItem(Order order, Product item, Integer itemQuantity){
+        this.order = order;
         this.item = item;
         this.itemQuantity = itemQuantity;
-        this.priceAtPurchase = priceAtPurchase;
+        this.priceAtPurchase = item.getPrice();
+        calculatePositionCost();
 
+    }
+
+    private void calculatePositionCost(){
+        if (itemQuantity <= 0){
+            throw new IllegalArgumentException("quantity must be positive");
+        }
+        positionCost = item.getPrice().multiply(BigDecimal.valueOf(itemQuantity));
     }
 
     public Long getId() {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public Order getOrder() {
+        return order;
     }
 
     public Product getItem() {
@@ -55,12 +66,16 @@ public class OrderItem {
         return priceAtPurchase;
     }
 
+    public BigDecimal getPositionCost() {
+        return positionCost;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public void setItem(Product item) {
@@ -73,5 +88,9 @@ public class OrderItem {
 
     public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
         this.priceAtPurchase = priceAtPurchase;
+    }
+
+    public void setPositionCost(BigDecimal positionCost) {
+        this.positionCost = positionCost;
     }
 }

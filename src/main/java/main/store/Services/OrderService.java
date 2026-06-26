@@ -2,36 +2,30 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import main.store.DTOs.OrderItemOut;
-import main.store.DTOs.OrderOut;
+import lombok.RequiredArgsConstructor;
+import main.store.DTOs.*;
 import main.store.Entities.*;
 import main.store.Repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private final CartRepo cartRepo;
     private final UserRepo userRepo;
-    private final ProductRepo productRepo;
     private final OrderRepo orderRepo;
     private final OrderItemRepo orderItemRepo;
 
-    public OrderService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo, OrderRepo orderRepo, OrderItemRepo orderItemRepo) {
-        this.cartRepo = cartRepo;
-        this.userRepo = userRepo;
-        this.productRepo = productRepo;
-        this.orderRepo = orderRepo;
-        this.orderItemRepo = orderItemRepo;
-    }
 
     @Transactional
     public OrderOut createOrder(CustomUserDetails userDetails) {
-        User user = userRepo.findByEmail(userDetails.getUsername());
         List<CartItem> cartItems = cartRepo.findByUserId(userDetails.getId());
         BigDecimal orderCost = BigDecimal.ZERO;
 
@@ -39,29 +33,25 @@ public class OrderService {
             throw new EntityNotFoundException("cannot create order with empty cart");
         }
 
+        User user = userRepo.getReferenceById(userDetails.getId());
+        Order order = new Order(
+                user,
+                Status.CREATED,
+                orderCost,
+                cartItems.size()
+        );
+
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem item : cartItems){
-            Product product = productRepo.findProductByTitle(item.getItem().getTitle());
-            if (product.getStorageQuantity() < item.getItemQuantity()){
-                throw new IllegalArgumentException("not enough product in store. Remain:" +product.getStorageQuantity());
-            }
+            OrderItem orderItem = createOrderItem(item, order);
 
-            BigDecimal cartPositionCost = product.getPrice().multiply(BigDecimal.valueOf(item.getItemQuantity()));
-            orderCost = orderCost.add(cartPositionCost);
+            orderCost = orderCost.add(orderItem.getPositionCost());
 
-            OrderItem orderItem = new OrderItem(user, product, item.getItemQuantity(), cartPositionCost);
             orderItems.add(orderItem);
-            orderItemRepo.save(orderItem);
-
         }
-
-
-        Order order = new Order(
-                userRepo.getReferenceById(userDetails.getId()),
-                Status.CREATED,
-                orderCost
-        );
-        orderRepo.save(order);
+        order.setTotalPrice(orderCost);
+        order.setTotalOrderItems(orderItems.size());
+        saveOrderAndClearCart(orderItems, order);
 
         List<OrderItemOut> itemOuts = orderItems
                 .stream()
@@ -76,9 +66,57 @@ public class OrderService {
                 itemOuts);
     }
 
+    @Transactional
+    public PaymentResponse pay(PaymentIn payment, Long orderId, CustomUserDetails userDetails) throws AccessDeniedException {
+        Order order = orderRepo.findByUser_Id(userDetails.getId());
+
+        if (!order.getUser().getId().equals(userDetails.getId())){
+            throw new AccessDeniedException("cannot pay for other users");
+        }
+
+        if (payment.amount().compareTo(order.getTotalPrice()) < 0){
+            throw new IllegalArgumentException("not enough money");
+        }
+
+        if (order.getStatus().equals(Status.PAID)){
+            throw new AccessDeniedException("order is already been paid");
+        }
+
+        order.setStatus(Status.PAID);
+        order.setPayDate(LocalDateTime.now());
+        orderRepo.save(order);
+
+        return new PaymentResponse(order.getId(),
+                order.getUser().getEmail(),
+                order.getTotalPrice(),
+                order.getPayDate());
+    }
+
     private OrderItemOut convertToItemsOut(OrderItem item){
         return new OrderItemOut(item.getItem().getTitle(),
                 item.getItemQuantity(),
                 item.getPriceAtPurchase());
+    }
+
+    private OrderItem createOrderItem(CartItem cartItem, Order order){
+        Product product = cartItem.getItem();
+        if (product.getStorageQuantity() < cartItem.getItemQuantity()){
+            throw new IllegalArgumentException("not enough product in store. Remain: %s"
+                    .formatted(product.getStorageQuantity()));
+        }
+        product.setStorageQuantity(product.getStorageQuantity() - cartItem.getItemQuantity());
+
+        return new OrderItem(order, product, cartItem.getItemQuantity());
+    }
+
+    private void saveOrderAndClearCart(List<OrderItem> items, Order order){
+        orderRepo.save(order);
+        orderItemRepo.saveAll(items);
+        cartRepo.deleteAllByUser_Id(order.getUser().getId());
+    }
+
+
+    public List<SmallOrderOut> getOrders(CustomUserDetails userDetails) {
+        return orderRepo.getOrdersByUserId(userDetails.getId());
     }
 }

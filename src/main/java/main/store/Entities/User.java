@@ -1,10 +1,14 @@
 package main.store.Entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import main.store.DTOs.UserRegistration;
 import jakarta.persistence.*;
 import main.store.Repositories.UserRole;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -28,45 +32,5 @@ public class User {
     public User(UserRegistration newUser){
         name = newUser.name();
         email = newUser.email();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public char[] getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPasswordHash(char[] passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
     }
 }

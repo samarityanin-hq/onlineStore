@@ -21,7 +21,10 @@ public interface CartRepo extends JpaRepository<CartItem, Long> {
     """)
     List<ItemOut> findDTO(@Param("userId") Long userId);
 
-    Optional<CartItem> findCartItemByUser_IdAndItem_Title(Long userId, String itemTitle);
+    @Query("SELECT c FROM CartItem c JOIN FETCH c.item WHERE c.user.id = :userId")
+    List<CartItem> findByUserId(@Param("userId") Long userId);
+
+    CartItem findCartItemByUser_IdAndItem_Title(Long userId, String itemTitle);
 
     void deleteAllByUser_Id(Long userId);
 

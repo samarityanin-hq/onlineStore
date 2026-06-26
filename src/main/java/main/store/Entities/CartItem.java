@@ -2,18 +2,23 @@ package main.store.Entities;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
+    @Setter
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartSequence")
     @SequenceGenerator(name = "cartSequence", sequenceName = "cartItemSequence", allocationSize = 50)
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -25,6 +30,7 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer itemQuantity;
 
+    @Setter
     @Column(name = "position_cost")
     private BigDecimal positionCost;
 
@@ -45,34 +51,6 @@ public class CartItem {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Product getItem() {
-        return item;
-    }
-
-    public Integer getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public BigDecimal getPositionCost() {
-        return positionCost;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public void setItem(Product item) {
         this.item = item;
         calculatePositionCost();
@@ -83,7 +61,4 @@ public class CartItem {
         calculatePositionCost();
     }
 
-    public void setPositionCost(BigDecimal positionCost) {
-        this.positionCost = positionCost;
-    }
 }
