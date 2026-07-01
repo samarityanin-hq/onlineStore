@@ -1,7 +1,7 @@
 package main.store.Controllers;
 
-import main.store.DTOs.CartItemsOut;
-import main.store.Entities.CustomUserDetails;
+import main.store.DTO.DTOout.CartItemsOut;
+import main.store.Security.CustomUserDetails;
 import main.store.Services.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 

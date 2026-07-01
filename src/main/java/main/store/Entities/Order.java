@@ -2,7 +2,7 @@ package main.store.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.store.Repositories.Status;
+import main.store.Enums.Status;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

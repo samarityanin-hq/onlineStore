@@ -1,12 +1,11 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import main.store.DTOs.CartItemsOut;
-import main.store.DTOs.ItemOut;
+import lombok.RequiredArgsConstructor;
+import main.store.DTO.DTOout.CartItemsOut;
+import main.store.DTO.DTOout.ItemOut;
 import main.store.Entities.CartItem;
-import main.store.Entities.CustomUserDetails;
+import main.store.Security.CustomUserDetails;
 import main.store.Entities.Product;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CartService {
 
     private final CartRepo cartRepo;

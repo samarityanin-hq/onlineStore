@@ -4,7 +4,7 @@ package main.store.Entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import main.store.DTOs.ProductToAdd;
+import main.store.DTO.DTOin.ProductToAdd;
 
 import java.math.BigDecimal;
 

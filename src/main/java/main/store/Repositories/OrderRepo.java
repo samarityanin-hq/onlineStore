@@ -1,6 +1,6 @@
 package main.store.Repositories;
 
-import main.store.DTOs.SmallOrderOut;
+import main.store.DTO.DTOout.OrderOut;
 import main.store.Entities.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,10 +14,10 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
 
     @Query("""
-    SELECT new main.store.DTOs.SmallOrderOut(
+    SELECT new main.store.DTO.DTOout.OrderOut(
         o.status, o.totalPrice, o.totalOrderItems, o.dateTime, o.payDate)
     FROM Order o
     WHERE o.user.id = :userId
     """)
-    List<SmallOrderOut> getOrdersByUserId(@Param("userId") Long userId);
+    List<OrderOut> getOrdersByUserId(@Param("userId") Long userId);
 }

@@ -2,9 +2,9 @@ package main.store.Entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.store.DTOs.UserRegistration;
+import main.store.DTO.DTOin.UserRegistration;
 import jakarta.persistence.*;
-import main.store.Repositories.UserRole;
+import main.store.Enums.UserRole;
 
 @Entity
 @Getter

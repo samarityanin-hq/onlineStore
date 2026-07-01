@@ -4,12 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.nio.file.AccessDeniedException;
+import java.util.Objects;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -24,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgExc(Exception e){
+    public ResponseEntity<String> handleIllegalArgExc(IllegalArgumentException e){
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(400)
@@ -32,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFoundExc(Exception e){
+    public ResponseEntity<String> handleEntityNotFoundExc(EntityNotFoundException e){
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(404)
@@ -40,11 +42,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedExc(Exception e){
+    public ResponseEntity<String> handleAccessDeniedExc(AccessDeniedException e){
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(403)
                 .body(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleArgNotValidExc(MethodArgumentNotValidException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(400)
+                .body(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
     }
 
 }

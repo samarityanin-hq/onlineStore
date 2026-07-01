@@ -1,6 +1,6 @@
 package main.store.Services;
 
-import main.store.Entities.CustomUserDetails;
+import main.store.Security.CustomUserDetails;
 import main.store.Entities.User;
 import main.store.Repositories.UserRepo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

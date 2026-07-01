@@ -3,11 +3,16 @@ package main.store.Services;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import main.store.DTOs.*;
+import main.store.DTO.DTOin.PaymentIn;
+import main.store.DTO.DTOout.FullOrderOut;
+import main.store.DTO.DTOout.OrderItemOut;
+import main.store.DTO.DTOout.OrderOut;
+import main.store.DTO.DTOout.PaymentResponse;
 import main.store.Entities.*;
+import main.store.Enums.Status;
 import main.store.Repositories.*;
+import main.store.Security.CustomUserDetails;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -25,7 +30,7 @@ public class OrderService {
 
 
     @Transactional
-    public OrderOut createOrder(CustomUserDetails userDetails) {
+    public FullOrderOut createOrder(CustomUserDetails userDetails) {
         List<CartItem> cartItems = cartRepo.findByUserId(userDetails.getId());
         BigDecimal orderCost = BigDecimal.ZERO;
 
@@ -59,7 +64,7 @@ public class OrderService {
                 .toList();
 
 
-        return new OrderOut(userDetails.getUsername(),
+        return new FullOrderOut(userDetails.getUsername(),
                 userDetails.getRealName(),
                 Status.CREATED,
                 orderCost,
@@ -111,7 +116,7 @@ public class OrderService {
     }
 
 
-    public List<SmallOrderOut> getOrders(CustomUserDetails userDetails) {
+    public List<OrderOut> getOrders(CustomUserDetails userDetails) {
         return orderRepo.getOrdersByUserId(userDetails.getId());
     }
 }

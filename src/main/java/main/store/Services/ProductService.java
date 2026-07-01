@@ -1,9 +1,10 @@
 package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
-import main.store.DTOs.CategoryList;
-import main.store.DTOs.CategoryOut;
-import main.store.DTOs.ProductOut;
+import lombok.RequiredArgsConstructor;
+import main.store.DTO.DTOout.CategoryList;
+import main.store.DTO.DTOout.CategoryOut;
+import main.store.DTO.DTOout.ProductOut;
 import main.store.Repositories.CategoryRepo;
 import main.store.Repositories.ProductRepo;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,15 +16,11 @@ import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
-
-    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo) {
-        this.productRepo = productRepo;
-        this.categoryRepo = categoryRepo;
-    }
 
     @Cacheable(value = "products", key = "#title")
     public ProductOut getProduct(String title){

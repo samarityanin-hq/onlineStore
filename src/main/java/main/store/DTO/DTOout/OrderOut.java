@@ -1,11 +1,11 @@
-package main.store.DTOs;
+package main.store.DTO.DTOout;
 
-import main.store.Repositories.Status;
+import main.store.Enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record SmallOrderOut(
+public record OrderOut(
         Status status,
         BigDecimal totalPrice,
         Integer totalItems,

@@ -1,11 +1,11 @@
 package main.store.Controllers;
 
 import jakarta.validation.Valid;
-import main.store.DTOs.OrderOut;
-import main.store.DTOs.PaymentIn;
-import main.store.DTOs.PaymentResponse;
-import main.store.DTOs.SmallOrderOut;
-import main.store.Entities.CustomUserDetails;
+import main.store.DTO.DTOout.FullOrderOut;
+import main.store.DTO.DTOin.PaymentIn;
+import main.store.DTO.DTOout.PaymentResponse;
+import main.store.DTO.DTOout.OrderOut;
+import main.store.Security.CustomUserDetails;
 import main.store.Services.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class OrderController{
     }
 
     @GetMapping("/createOrder")
-    public ResponseEntity<OrderOut> createOrder(
+    public ResponseEntity<FullOrderOut> createOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails
             ){
         log.info("called method createOrder");
@@ -49,7 +49,7 @@ public class OrderController{
     }
 
     @GetMapping("/orderList")
-    public ResponseEntity<List<SmallOrderOut>> getOrders(
+    public ResponseEntity<List<OrderOut>> getOrders(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         log.info("called method getOrders");

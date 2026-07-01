@@ -1,4 +1,4 @@
-package main.store.Repositories;
+package main.store.Enums;
 
 public enum UserRole {
     ROLE_USER,

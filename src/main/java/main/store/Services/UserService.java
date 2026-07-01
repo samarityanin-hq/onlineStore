@@ -2,31 +2,25 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import main.store.DTOs.UserOut;
-import main.store.DTOs.UserRegistration;
-import main.store.Entities.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
+import main.store.DTO.DTOout.UserOut;
+import main.store.DTO.DTOin.UserRegistration;
+import main.store.Security.CustomUserDetails;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
-import main.store.Repositories.UserRole;
+import main.store.Enums.UserRole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-import java.util.Arrays;
-
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final CartRepo cartRepo;
 
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder, CartRepo cartRepo) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
-        this.cartRepo = cartRepo;
-    }
 
     public UserOut createUser(@Valid UserRegistration user) {
         if (userRepo.findByEmail(user.email()) != null || userRepo.findUserByName(user.name()) != null){

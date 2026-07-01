@@ -1,11 +1,11 @@
-package main.store.DTOs;
+package main.store.DTO.DTOout;
 
-import main.store.Repositories.Status;
+import main.store.Enums.Status;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public record OrderOut(
+public record FullOrderOut(
         String email,
         String name,
         Status status,
