@@ -2,6 +2,7 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import main.store.DTOs.CartItemsOut;
 import main.store.DTOs.ItemOut;
 import main.store.Entities.CartItem;
@@ -11,37 +12,25 @@ import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.ProductRepo;
 import main.store.Repositories.UserRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CartService {
 
     private final CartRepo cartRepo;
     private final UserRepo userRepo;
     private final ProductRepo productRepo;
 
-    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo) {
-        this.cartRepo = cartRepo;
-        this.userRepo = userRepo;
-        this.productRepo = productRepo;
-    }
-
     @Transactional
-    public void addToCart(String productTitle, CustomUserDetails userDetails) {
-
-        Product product = productRepo.findProductByTitle(productTitle);
-        if (product == null){
-            throw new EntityNotFoundException("Product not found");
-        }
-
+    public void addToCart(long productId, CustomUserDetails userDetails) {
+        Product product = productRepo.getReferenceById(productId);
         User user = userRepo.getReferenceById(userDetails.getId());
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(user.getId(), productTitle);
+
+        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId());
 
         if (cartItem == null){
             cartItem = new CartItem(user, product, 1);
@@ -49,9 +38,7 @@ public class CartService {
         }
         else {
             cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
-
         }
-
     }
 
 
@@ -66,9 +53,9 @@ public class CartService {
     }
 
     @Transactional
-    public CartItemsOut decrementCartPosition(String productTitle, CustomUserDetails userDetails) {
+    public CartItemsOut decrementCartPosition(long productId, CustomUserDetails userDetails) {
 
-        CartItem cartItem = findCartItem(productTitle, userDetails);
+        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId());
 
         if (cartItem.getItemQuantity() > 1){
             cartItem.setItemQuantity(cartItem.getItemQuantity()-1);
@@ -81,9 +68,9 @@ public class CartService {
     }
 
     @Transactional
-    public CartItemsOut deleteCartPosition(String productTitle, CustomUserDetails userDetails){
+    public CartItemsOut deleteCartPosition(long itemId, CustomUserDetails userDetails){
 
-        cartRepo.delete(findCartItem(productTitle, userDetails));
+        cartRepo.deleteByIdAndUserId(itemId, userDetails.getId());
 
         return cartItemsOut(userDetails);
     }
@@ -97,17 +84,6 @@ public class CartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new CartItemsOut(items, cartCost);
-    }
-
-    private CartItem findCartItem(String productTitle, CustomUserDetails userDetails){
-
-        CartItem cartItem = cartRepo.findCartItemByUser_IdAndItem_Title(userDetails.getId(), productTitle);
-        if (cartItem == null){
-            throw new EntityNotFoundException("No such product in your cart");
-        }
-
-
-        return cartItem;
     }
 
 }

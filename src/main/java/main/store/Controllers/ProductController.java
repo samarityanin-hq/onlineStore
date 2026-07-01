@@ -1,5 +1,6 @@
 package main.store.Controllers;
 
+import main.store.DTOs.CategoryList;
 import main.store.DTOs.ProductOut;
 import main.store.Services.ProductService;
 import org.slf4j.Logger;
@@ -35,6 +36,25 @@ public class ProductController {
                 .body(productService.getProduct(title));
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<CategoryList> getCategory(){
+        log.info("called method getCategories");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(productService.getCategories());
+    }
+
+    @GetMapping("/catalog/{categoryName}")
+    public ResponseEntity<Page<ProductOut>> getProductsByCategory(
+            @PathVariable String categoryName,
+            Pageable pageable
+    ){
+        log.info("called method getProductsByCategory");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(productService.getProductByCategory(categoryName, pageable));
+    }
+
     @GetMapping("/catalog")
     public ResponseEntity<Page<ProductOut>> getCatalog(
             Pageable pageable
@@ -44,6 +64,8 @@ public class ProductController {
                 .status(HttpStatus.OK)
                 .body(productService.getProductsCatalog(pageable));
     }
+
+
 
 
 

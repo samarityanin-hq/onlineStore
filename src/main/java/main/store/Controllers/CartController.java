@@ -27,10 +27,10 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<Void> addCartItem(
-            @RequestParam String productTitle,
+            @RequestParam long productId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        cartService.addToCart(productTitle, userDetails);
+        cartService.addToCart(productId, userDetails);
         log.info("called method addCartItem");
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -60,24 +60,24 @@ public class CartController {
 
     @DeleteMapping("/decrement")
     public ResponseEntity<CartItemsOut> decrementCartPosition(
-            @RequestParam String productTitle,
+            @RequestParam long productId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         log.info("called method decrementCartPosition");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.decrementCartPosition(productTitle, userDetails));
+                .body(cartService.decrementCartPosition(productId, userDetails));
     }
 
     @DeleteMapping("/deletePosition")
     public ResponseEntity<CartItemsOut> deleteCartPosition(
-            @RequestParam String productTitle,
+            @RequestParam long itemId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         log.info("called method deleteCartPosition");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(cartService.deleteCartPosition(productTitle, userDetails));
+                .body(cartService.deleteCartPosition(itemId, userDetails));
     }
 
 }

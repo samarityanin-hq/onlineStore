@@ -17,7 +17,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericExc(Exception e){
-
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(500)
@@ -46,7 +45,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(403)
                 .body(e.getMessage());
-
-
     }
+
 }

@@ -25,10 +25,15 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     SELECT new main.store.DTOs.ProductOut(p.title, p.price, p.storageQuantity)
         FROM Product p
     """)
-    Page<ProductOut> findDTOList(Pageable pageable);
+    Page<ProductOut> getProductList(Pageable pageable);
 
+    @Query("""
+    SELECT new main.store.DTOs.ProductOut(p.title, p.price, p.storageQuantity)
+    FROM Product p
+    WHERE p.category.name = :categoryName
+""")
+    Page<ProductOut> findByCategoryName(@Param("categoryName") String categoryName,
+                                        Pageable pageable);
 
-
-    Product findProductByTitle(String title);
 
 }

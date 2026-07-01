@@ -28,11 +28,8 @@ public class UserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User with email: " + email + " not found");
         }
 
-
         return new CustomUserDetails(user,
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
-
-
 
     }
 }

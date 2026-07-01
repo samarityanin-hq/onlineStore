@@ -1,5 +1,6 @@
 package main.store.Repositories;
 
+import jakarta.transaction.Transactional;
 import main.store.DTOs.CartItemsOut;
 import main.store.DTOs.ItemOut;
 import main.store.Entities.CartItem;
@@ -24,8 +25,13 @@ public interface CartRepo extends JpaRepository<CartItem, Long> {
     @Query("SELECT c FROM CartItem c JOIN FETCH c.item WHERE c.user.id = :userId")
     List<CartItem> findByUserId(@Param("userId") Long userId);
 
-    CartItem findCartItemByUser_IdAndItem_Title(Long userId, String itemTitle);
+    CartItem getByItem_IdAndUser_Id(Long itemId, Long userId);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM CartItem c WHERE c.id = : itemdId AND c.user.id = :userId")
+    void deleteByIdAndUserId(@Param("itemId") Long itemId, @Param("userId") Long userId);
+    
     void deleteAllByUser_Id(Long userId);
 
 

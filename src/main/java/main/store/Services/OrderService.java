@@ -68,18 +68,13 @@ public class OrderService {
 
     @Transactional
     public PaymentResponse pay(PaymentIn payment, Long orderId, CustomUserDetails userDetails) throws AccessDeniedException {
-        Order order = orderRepo.findByUser_Id(userDetails.getId());
-
-        if (!order.getUser().getId().equals(userDetails.getId())){
-            throw new AccessDeniedException("cannot pay for other users");
-        }
-
-        if (payment.amount().compareTo(order.getTotalPrice()) < 0){
-            throw new IllegalArgumentException("not enough money");
-        }
+        Order order = orderRepo.findByUserIdAndOrderId(userDetails.getId(), orderId);
 
         if (order.getStatus().equals(Status.PAID)){
             throw new AccessDeniedException("order is already been paid");
+        }
+        if (payment.amount().compareTo(order.getTotalPrice()) < 0){
+            throw new IllegalArgumentException("not enough money");
         }
 
         order.setStatus(Status.PAID);

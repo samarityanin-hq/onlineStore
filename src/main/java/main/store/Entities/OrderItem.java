@@ -1,10 +1,14 @@
 package main.store.Entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "order_items")
 public class OrderItem {
     @Id
@@ -46,51 +50,4 @@ public class OrderItem {
         positionCost = item.getPrice().multiply(BigDecimal.valueOf(itemQuantity));
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public Product getItem() {
-        return item;
-    }
-
-    public Integer getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public BigDecimal getPriceAtPurchase() {
-        return priceAtPurchase;
-    }
-
-    public BigDecimal getPositionCost() {
-        return positionCost;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setItem(Product item) {
-        this.item = item;
-    }
-
-    public void setItemQuantity(Integer itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
-    public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
-        this.priceAtPurchase = priceAtPurchase;
-    }
-
-    public void setPositionCost(BigDecimal positionCost) {
-        this.positionCost = positionCost;
-    }
 }
