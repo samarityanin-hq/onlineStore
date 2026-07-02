@@ -1,9 +1,9 @@
 package main.store.Controllers;
 
 import jakarta.validation.Valid;
-import main.store.DTOs.CategoryList;
-import main.store.DTOs.ProductOut;
-import main.store.DTOs.ProductToAdd;
+import main.store.DTO.DTOout.CategoryList;
+import main.store.DTO.DTOin.ProductToAdd;
+import main.store.DTO.DTOin.UserToAdmin;
 import main.store.Services.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,17 @@ public class AdminController {
                 .status(HttpStatus.CREATED)
                 .build();
 
+    }
+
+    @PostMapping("/promoteToAdmin")
+    public ResponseEntity<Void> promoteToAdmin(
+            @RequestBody UserToAdmin user
+            ){
+        log.info("called method promoteToAdmin");
+        adminService.promoteToAdmin(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
 

@@ -1,33 +1,28 @@
 package main.store.Services;
 
-import main.store.DTOs.CategoryList;
-import main.store.DTOs.CategoryOut;
-import main.store.DTOs.ProductOut;
-import main.store.DTOs.ProductToAdd;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import main.store.DTO.DTOin.ProductToAdd;
+import main.store.DTO.DTOin.UserToAdmin;
+import main.store.DTO.DTOout.CategoryList;
+import main.store.DTO.DTOout.CategoryOut;
 import main.store.Entities.Category;
 import main.store.Entities.Product;
-import main.store.Repositories.CategoryRepo;
-import main.store.Repositories.OrderRepo;
-import main.store.Repositories.ProductRepo;
-import main.store.Repositories.UserRepo;
+import main.store.Entities.User;
+import main.store.Enums.UserRole;
+import main.store.Repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
     private final UserRepo userRepo;
     private final ProductRepo productRepo;
     private final OrderRepo orderRepo;
     private final CategoryRepo categoryRepo;
-
-    public AdminService(UserRepo userRepo, ProductRepo productRepo, OrderRepo orderRepo, CategoryRepo categoryRepo) {
-        this.userRepo = userRepo;
-        this.productRepo = productRepo;
-        this.orderRepo = orderRepo;
-        this.categoryRepo = categoryRepo;
-    }
 
 
     public void addProduct(ProductToAdd product){
@@ -37,16 +32,17 @@ public class AdminService {
     }
 
     public CategoryList getCategories() {
-        List<Category> categories = categoryRepo.findAll();
-        
-        return new CategoryList(categories
-                .stream()
-                .map(this::convertToCategoryOut)
-                .toList());
+        List<CategoryOut> categories = categoryRepo.getAllCategories();
+        return new CategoryList(categories);
     }
 
-    private CategoryOut convertToCategoryOut(Category category){
-        return new CategoryOut(category.getId(),
-                category.getName());
+    @Transactional
+    public void promoteToAdmin(UserToAdmin userToAdmin) {
+        User user = userRepo.findByEmail(userToAdmin.email());
+        user.setRole(UserRole.ROLE_ADMIN);
     }
+
+
+
+
 }
