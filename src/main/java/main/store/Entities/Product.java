@@ -27,7 +27,7 @@ public class Product {
     @Column(name = "storage_quantity")
     private Integer storageQuantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private Category category;
 
