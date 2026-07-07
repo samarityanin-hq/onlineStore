@@ -1,6 +1,9 @@
 package main.store.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import main.store.DTO.DTOout.FullOrderOut;
 import main.store.DTO.DTOin.PaymentIn;
 import main.store.DTO.DTOout.PaymentResponse;
@@ -17,16 +20,17 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
+@Tag(name = "Контроллер заказов", description = "Управление заказами(только для аутентифицированных юзеров)")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderController{
+
     private final OrderService orderService;
+
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
+    @Operation(summary = "Создать заказ")
     @GetMapping("/createOrder")
     public ResponseEntity<FullOrderOut> createOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -37,6 +41,7 @@ public class OrderController{
                 .body(orderService.createOrder(userDetails));
     }
 
+    @Operation(summary = "Оплатить(условно) заказ")
     @PostMapping("/{orderId}/pay")
     public ResponseEntity<PaymentResponse> pay(
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -48,6 +53,7 @@ public class OrderController{
                 .body(orderService.pay(payment, orderId,userDetails));
     }
 
+    @Operation(summary = "Получить список заказов пользователя")
     @GetMapping("/orderList")
     public ResponseEntity<List<OrderOut>> getOrders(
             @AuthenticationPrincipal CustomUserDetails userDetails

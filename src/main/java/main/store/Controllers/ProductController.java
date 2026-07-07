@@ -1,5 +1,8 @@
 package main.store.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import main.store.DTO.DTOout.CategoryList;
 import main.store.DTO.DTOout.ProductOut;
 import main.store.Services.ProductService;
@@ -11,17 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Контроллер продуктов")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
+
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
-    public ProductController(ProductService productService){
-        this.productService = productService;
-    }
-
+    @Operation(summary = "Получить товар по имени")
     @GetMapping("/{title}")
     public ResponseEntity<ProductOut> getProduct(
             @PathVariable String title){
@@ -32,6 +35,7 @@ public class ProductController {
                 .body(productService.getProduct(title));
     }
 
+    @Operation(summary = "Получить список категорий")
     @GetMapping("/categories")
     public ResponseEntity<CategoryList> getCategory(){
         log.info("called method getCategories");
@@ -40,6 +44,7 @@ public class ProductController {
                 .body(productService.getCategories());
     }
 
+    @Operation(summary = "Получить все товары из одной категории")
     @GetMapping("/catalog/{categoryName}")
     public ResponseEntity<Page<ProductOut>> getProductsByCategory(
             @PathVariable String categoryName,
@@ -51,6 +56,7 @@ public class ProductController {
                 .body(productService.getProductByCategory(categoryName, pageable));
     }
 
+    @Operation(summary = "Получить каталог товаров")
     @GetMapping("/catalog")
     public ResponseEntity<Page<ProductOut>> getCatalog(
             Pageable pageable

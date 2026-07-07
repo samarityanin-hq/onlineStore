@@ -1,0 +1,464 @@
+{
+  "info": {
+    "_postman_id": "4808da7a-43a2-4108-9abf-4b3c1a2184c9",
+    "name": "StoreRequests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51826210",
+    "_collection_link": "https://go.postman.co/collection/51826210-4808da7a-43a2-4108-9abf-4b3c1a2184c9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "createUser",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"sd\",\r\n    \"email\": \"ssss\",\r\n    \"password\": \"xxxx\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/registration",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "registration"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "Max@gmail.com",
+              "type": "text",
+              "uuid": "6b8cba56-cca5-4dab-9237-9d691f970d78"
+            },
+            {
+              "key": "password",
+              "value": "xxxx",
+              "type": "text",
+              "uuid": "fecb5496-0821-49d8-b625-83bca63d7489"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "Max@gmail.com",
+              "type": "text",
+              "uuid": "6b8cba56-cca5-4dab-9237-9d691f970d78"
+            },
+            {
+              "key": "password",
+              "value": "xxxx",
+              "type": "text",
+              "uuid": "fecb5496-0821-49d8-b625-83bca63d7489"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/logout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sessionCheck",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/me",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getProductByName",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/macb",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "macb"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SortByCategory",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/catalog/graphic-cards?page=0&size=5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "catalog",
+            "graphic-cards"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Catalog",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/catalog?page=0&size=3&sort=price,asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "catalog"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "3"
+            },
+            {
+              "key": "sort",
+              "value": "price,asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addToCart",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/add?productId=7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "add"
+          ],
+          "query": [
+            {
+              "key": "productId",
+              "value": "7"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "showUserCart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/showCartItems",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "showCartItems"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getOrderList",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/orders/orderList",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "orders",
+            "orderList"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ClearCart",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/clear",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "clear"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "decrementPosition",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/decrement?productTitle=milk",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "decrement"
+          ],
+          "query": [
+            {
+              "key": "productTitle",
+              "value": "milk"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deletePosition",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/deletePosition?productTitle=apple Air Pods",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "deletePosition"
+          ],
+          "query": [
+            {
+              "key": "productTitle",
+              "value": "apple Air Pods"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "showCategoriesToAdmin",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/admin/addProduct/getCategories",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "addProduct",
+            "getCategories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createNewProduct",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"NVIDIA 5090\",\r\n    \"price\": 899.99,\r\n    \"quantity\": 5,\r\n    \"categoryId\": 3\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/addProduct/createProduct",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "addProduct",
+            "createProduct"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateOrder",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/orders/createOrder",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "orders",
+            "createOrder"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "pay",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amount\": 1299.96\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/orders/3/pay",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "orders",
+            "3",
+            "pay"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

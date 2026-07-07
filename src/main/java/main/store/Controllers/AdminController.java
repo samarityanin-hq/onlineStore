@@ -1,6 +1,9 @@
 package main.store.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import main.store.DTO.DTOout.CategoryList;
 import main.store.DTO.DTOin.ProductToAdd;
 import main.store.DTO.DTOin.UserToAdmin;
@@ -11,17 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Контроллер админа", description = "Доступно только пользователям со статусом админа")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
 
     private final AdminService adminService;
+
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
-    public AdminController(AdminService adminService) {
-        this.adminService = adminService;
-    }
-
+    @Operation(summary = "Показать доступные категории")
     @GetMapping("/addProduct/getCategories")
     public ResponseEntity<CategoryList> getCategories(){
         log.info("called admin method getCategories");
@@ -30,6 +33,7 @@ public class AdminController {
                 .body(adminService.getCategories());
     }
 
+    @Operation(summary = "Добавить продукт")
     @PostMapping("/addProduct/createProduct")
     public ResponseEntity<Void> addProduct(
             @Valid @RequestBody ProductToAdd product){
@@ -38,9 +42,9 @@ public class AdminController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
-
     }
 
+    @Operation(summary = "Повысить обычного юзера до админа")
     @PostMapping("/promoteToAdmin")
     public ResponseEntity<Void> promoteToAdmin(
             @RequestBody UserToAdmin user

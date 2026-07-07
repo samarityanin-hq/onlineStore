@@ -29,9 +29,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, "/registration").permitAll()
                             .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                             .requestMatchers("/cart/**", "/orders/**").hasRole("USER")
-
                             .requestMatchers("/admin/**").hasRole("ADMIN")
 
                             .anyRequest().authenticated()

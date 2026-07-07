@@ -1,5 +1,8 @@
 package main.store.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import main.store.DTO.DTOout.UserOut;
 import main.store.Security.CustomUserDetails;
 import main.store.Services.UserService;
@@ -12,17 +15,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Проверка сессии")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
+
     private final UserService userService;
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
-
+    @Operation(summary = "Проверка сессии после аутентификации")
     @GetMapping("/me")
     public ResponseEntity<UserOut> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails){
