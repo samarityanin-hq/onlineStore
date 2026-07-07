@@ -31,7 +31,7 @@ public class OrderController{
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Operation(summary = "Создать заказ")
-    @GetMapping("/createOrder")
+    @PostMapping("/createOrder")
     public ResponseEntity<FullOrderOut> createOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails
             ){
