@@ -3,6 +3,10 @@ package main.store.Services;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import main.store.CustomExceptions.EmptyCartException;
+import main.store.CustomExceptions.InvalidPaymentAmountException;
+import main.store.CustomExceptions.OrderAlreadyPaidException;
+import main.store.CustomExceptions.ProductOutOfStockException;
 import main.store.DTO.DTOin.PaymentIn;
 import main.store.DTO.DTOout.FullOrderOut;
 import main.store.DTO.DTOout.OrderItemOut;
@@ -14,7 +18,6 @@ import main.store.Repositories.*;
 import main.store.Security.CustomUserDetails;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +38,7 @@ public class OrderService {
         BigDecimal orderCost = BigDecimal.ZERO;
 
         if (cartItems.isEmpty()){
-            throw new EntityNotFoundException("cannot create order with empty cart");
+            throw new EmptyCartException(userDetails.getRealName(), userDetails.getUsername());
         }
 
         User user = userRepo.getReferenceById(userDetails.getId());
@@ -72,14 +75,14 @@ public class OrderService {
     }
 
     @Transactional
-    public PaymentResponse pay(PaymentIn payment, Long orderId, CustomUserDetails userDetails) throws AccessDeniedException {
+    public PaymentResponse pay(PaymentIn payment, Long orderId, CustomUserDetails userDetails){
         Order order = orderRepo.findByUserIdAndOrderId(userDetails.getId(), orderId);
 
         if (order.getStatus().equals(Status.PAID)){
-            throw new AccessDeniedException("order is already been paid");
+            throw new OrderAlreadyPaidException(orderId);
         }
-        if (payment.amount().compareTo(order.getTotalPrice()) < 0){
-            throw new IllegalArgumentException("not enough money");
+        if (payment.amount().compareTo(order.getTotalPrice()) != 0){
+            throw new InvalidPaymentAmountException(orderId, order.getTotalPrice(), payment.amount());
         }
 
         order.setStatus(Status.PAID);
@@ -101,8 +104,7 @@ public class OrderService {
     private OrderItem createOrderItem(CartItem cartItem, Order order){
         Product product = cartItem.getItem();
         if (product.getStorageQuantity() < cartItem.getItemQuantity()){
-            throw new IllegalArgumentException("not enough product in store. Remain: %s"
-                    .formatted(product.getStorageQuantity()));
+            throw new ProductOutOfStockException(product.getTitle(), product.getId());
         }
         product.setStorageQuantity(product.getStorageQuantity() - cartItem.getItemQuantity());
 

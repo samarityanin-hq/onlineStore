@@ -1,6 +1,7 @@
 package main.store.ExceptionHandler;
 
 import jakarta.persistence.EntityNotFoundException;
+import main.store.CustomExceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -49,12 +50,54 @@ public class GlobalExceptionHandler {
                 .body(e.getMessage());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleArgNotValidExc(MethodArgumentNotValidException e){
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<String> handleUserAlreadyExistsExc(UserAlreadyExistsException e){
         log.error(exceptionStr, e);
         return ResponseEntity
-                .status(400)
-                .body(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+                .status(409)
+                .body(e.getMessage());
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgNotValidExc(MethodArgumentNotValidException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(ProductOutOfStockException.class)
+    public ResponseEntity<String> handleProductOutOfStockExc(ProductOutOfStockException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(OrderAlreadyPaidException.class)
+    public ResponseEntity<String> handleOrderAlreadyPaidExc(OrderAlreadyPaidException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPaymentAmountException.class)
+    public ResponseEntity<String> handleInvalidPaymentAmountExc(InvalidPaymentAmountException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(EmptyCartException.class)
+    public ResponseEntity<String> handleEmptyCartExc(EmptyCartException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(e.getMessage());
+    }
+
+
 
 }
