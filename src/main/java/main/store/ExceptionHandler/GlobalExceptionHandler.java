@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleBadCredentialsExc(BadCredentialsException e){
         log.error(exceptionStr, e);
         return ResponseEntity
-                .status(400)
+                .status(401)
                 .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
     }
 
