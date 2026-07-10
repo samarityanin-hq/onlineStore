@@ -1,8 +1,8 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import main.store.CustomExceptions.UserAlreadyExistsException;
 import main.store.DTO.DTOout.UserOut;
 import main.store.DTO.DTOin.UserRegistration;
 import main.store.Security.CustomUserDetails;
@@ -23,15 +23,18 @@ public class UserService {
 
 
     public UserOut createUser(@Valid UserRegistration user) {
-        if (userRepo.findByEmail(user.email()) != null || userRepo.findUserByName(user.name()) != null){
-            throw new EntityNotFoundException("User is already exists");
+        if (userRepo.existsByEmail(user.email())){
+            throw new UserAlreadyExistsException("email", user.email());
+        }
+
+        if (userRepo.existsByName(user.name())){
+            throw new UserAlreadyExistsException("name", user.name());
         }
 
         User newUser = new User(user);
         newUser.setRole(UserRole.ROLE_USER);
         String hashedPassword = passwordEncoder.encode(new String(user.password()));
         newUser.setPasswordHash(hashedPassword.toCharArray());
-
         userRepo.save(newUser);
 
         return convertToUserOut(newUser);
@@ -41,7 +44,6 @@ public class UserService {
         User user = userRepo.findByEmail(userDetails.getUsername());
         return convertToUserOut(user);
     }
-
 
 
     private UserOut convertToUserOut(User user){
