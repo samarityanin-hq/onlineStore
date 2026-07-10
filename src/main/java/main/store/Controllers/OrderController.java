@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Tag(name = "Контроллер заказов", description = "Управление заказами(только для аутентифицированных юзеров)")
@@ -46,7 +44,7 @@ public class OrderController{
     public ResponseEntity<PaymentResponse> pay(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody PaymentIn payment,
-            @PathVariable long orderId) throws AccessDeniedException {
+            @PathVariable long orderId){
         log.info("called method pay");
         return ResponseEntity
                 .status(HttpStatus.OK)

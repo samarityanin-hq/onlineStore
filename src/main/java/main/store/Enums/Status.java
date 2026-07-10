@@ -1,5 +1,8 @@
 package main.store.Enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Status {
     CREATED("CREATED"),
     PAID("PAID"),
@@ -11,7 +14,4 @@ public enum Status {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }
