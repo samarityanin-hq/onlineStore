@@ -40,7 +40,7 @@ public class ProductService {
         return new CategoryList(categories);
     }
 
-    public Page<ProductOut> getProductByCategory(String categoryName, Pageable pageable) {
+    public Page<ProductOut> sortByCategory(String categoryName, Pageable pageable) {
         return productRepo.findByCategoryName(categoryName, pageable);
 
     }

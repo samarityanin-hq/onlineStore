@@ -53,7 +53,7 @@ public class ProductController {
         log.info("called method getProductsByCategory");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.getProductByCategory(categoryName, pageable));
+                .body(productService.sortByCategory(categoryName, pageable));
     }
 
     @Operation(summary = "Получить каталог товаров")
