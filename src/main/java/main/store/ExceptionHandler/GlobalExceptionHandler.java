@@ -31,7 +31,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgNotValidExc(MethodArgumentNotValidException e){
-        String errorFields = e.getFieldError().getField() + ": " + e.getFieldError().getDefaultMessage();
+        String errorFields = e.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(java.util.stream.Collectors.joining("; "));
 
         log.error(exceptionStr, e);
         return ResponseEntity

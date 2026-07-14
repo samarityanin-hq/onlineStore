@@ -1,8 +1,6 @@
 package main.store.DTO.DTOin;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record UserRegistration(
         @NotBlank(message = "name cannot be empty")
@@ -13,7 +11,8 @@ public record UserRegistration(
         @NotBlank
         String email,
 
-        @NotBlank
+        @NotNull(message = "password field cannot be null")
+        @NotEmpty(message = "password field cannot be empty")
         @Size(min = 8, message = "password should be min 8 symbols")
         char[] password) {
 }

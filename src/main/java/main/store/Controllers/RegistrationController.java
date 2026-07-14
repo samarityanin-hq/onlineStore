@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/registration")
-public class RegController {
+public class RegistrationController {
 
     private final UserService userService;
 
-    private static final Logger log = LoggerFactory.getLogger(RegController.class);
+    private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
 
     @Operation(summary = "Регистрация пользователя")
     @PostMapping

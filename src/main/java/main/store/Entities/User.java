@@ -1,5 +1,6 @@
 package main.store.Entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import main.store.DTO.DTOin.UserRegistration;
@@ -9,6 +10,7 @@ import main.store.Enums.UserRole;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
