@@ -5,6 +5,7 @@ import main.store.CustomExceptions.UserAlreadyExistsException;
 import main.store.DTO.DTOin.UserRegistration;
 import main.store.DTO.DTOout.UserOut;
 import main.store.Services.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -27,16 +28,22 @@ public class RegistrationControllerTest {
     @MockitoBean
     private org.springframework.cache.CacheManager cacheManager;
 
+    private String json;
 
-    @Test
-    void createUser_validInputData_userCreated() throws Exception {
-        String json = """
+    @BeforeEach
+    void setUp(){
+        json = """
                 {
                 "name":"name",
                 "email":"name@email.en",
                 "password":"123qwetq455"
                 }
                 """;
+    }
+
+
+    @Test
+    void createUser_validInputData_userCreated() throws Exception {
 
         UserOut createdUser = new UserOut(
                 "name",
@@ -51,17 +58,12 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("$.name").value("name"))
                 .andExpect(jsonPath("$.email").value("name@email.en"))
                 .andExpect(jsonPath("$.cartItems").value(0));
+
+        verify(userService).createUser(any());
     }
 
     @Test
     void createUser_validInput_userAlreadyExists() throws Exception {
-        String json = """
-                {
-                "name":"name",
-                "email":"name@email.en",
-                "password":"123qwetq455"
-                }
-                """;
 
         when(userService.createUser(any(UserRegistration.class)))
                 .thenThrow(new UserAlreadyExistsException("email", "name@email.en"));
@@ -73,6 +75,8 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.message")
                         .value("User with email: name@email.en already exists"));
+
+        verify(userService, times(1)).createUser(any());
 
     }
 
@@ -93,6 +97,8 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.message")
                         .value("name: name should be min 3 symbols"));
+
+        verify(userService, never()).createUser(any());
 
     }
 

@@ -12,6 +12,7 @@ import main.store.DTO.DTOout.PaymentResponse;
 import main.store.Enums.Status;
 import main.store.Security.CustomUserDetails;
 import main.store.Services.OrderService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -40,15 +41,19 @@ public class OrderControllerTest {
 
     @MockitoBean
     private org.springframework.cache.CacheManager cacheManager;
+    private String json;
 
-    private final String json = """
+    @BeforeEach
+    void setUp(){
+        json = """
                 {
                 "amount": "999.99"
                 }
                 """;
+    }
 
     @Test
-    @WithMockUser("user@email.com")
+    @WithMockUser
     void createOrder_createdSuccessfully() throws Exception {
         OrderItemOut mockItem = new OrderItemOut("Item_X", 2, new BigDecimal("399.99"));
 

@@ -2,6 +2,7 @@ package main.store.Entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@AllArgsConstructor
 @Table(name = "cart_items")
 public class CartItem {
     @Setter

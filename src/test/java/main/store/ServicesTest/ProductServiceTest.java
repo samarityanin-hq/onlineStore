@@ -51,13 +51,17 @@ public class ProductServiceTest {
         assertEquals("Phone", result.title());
         assertEquals(new BigDecimal("999.99"), result.price());
         assertEquals(20, result.quantity());
+
+        verify(productRepo).findProductDTO(any());
     }
 
     @Test
-    void getProduct_invalidTitle_throwsException(){
+    void getProduct_invalidTitle(){
         when(productRepo.findProductDTO("invalidTitle"))
                 .thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> productService.getProduct("invalidTitle"));
+        assertThrows(EntityNotFoundException.class, () -> productService.getProduct("invalidTitle"));
+
+        verify(productRepo, times(1)).findProductDTO(any());
     }
 
     @Test
@@ -78,6 +82,8 @@ public class ProductServiceTest {
         assertEquals("Phone", result.getContent().getFirst().title());
         assertEquals("Laptop", result.getContent().get(1).title());
 
+        verify(productRepo).getProductList(any());
+
     }
 
     @Test
@@ -94,6 +100,8 @@ public class ProductServiceTest {
         assertEquals(2, result.categories().size());
         assertEquals("Phones", result.categories().get(0).name());
         assertEquals("Earphones", result.categories().get(1).name());
+
+        verify(categoryRepo).getAllCategories();
     }
 
     @Test
@@ -113,6 +121,8 @@ public class ProductServiceTest {
         assertEquals(2, result.getContent().size());
         assertEquals("Phone1", result.getContent().getFirst().title());
         assertEquals("Phone2", result.getContent().get(1).title());
+
+        verify(productRepo).findByCategoryName(any(), any());
     }
 
     @Test
@@ -125,6 +135,8 @@ public class ProductServiceTest {
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
+
+        verify(productRepo, times(1)).findByCategoryName(any(), any());
 
     }
 

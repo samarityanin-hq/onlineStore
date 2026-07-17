@@ -42,6 +42,7 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Phone"));
 
+        verify(productService).getProduct(any());
     }
 
     @Test
@@ -54,6 +55,8 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.message")
                         .value("Product with title invalid doesnt exist"));
+
+        verify(productService, times(1)).getProduct(any());
     }
 
 

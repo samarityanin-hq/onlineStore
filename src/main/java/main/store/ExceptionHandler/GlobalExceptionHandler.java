@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -39,6 +40,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(400)
                 .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), errorFields));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentMismatchExc(MethodArgumentTypeMismatchException e){
+        String message = String.format("Param %s must be number", e.getName());
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(400)
+                .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), message));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -120,6 +130,8 @@ public class GlobalExceptionHandler {
                 .status(500)
                 .body(new ExceptionResponse(500, HttpCodeResponse.InternalServerError.getCode(), e.getMessage()));
     }
+
+
 
 
 }

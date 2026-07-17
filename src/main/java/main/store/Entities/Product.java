@@ -2,6 +2,7 @@ package main.store.Entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import main.store.DTO.DTOin.ProductToAdd;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
     @Id
@@ -37,7 +39,6 @@ public class Product {
         price = product.price();
         storageQuantity = product.quantity();
         this.category = category;
-
     }
 
 }

@@ -1,6 +1,5 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import main.store.CustomExceptions.EmptyCartException;
@@ -34,7 +33,7 @@ public class OrderService {
 
     @Transactional
     public FullOrderOut createOrder(CustomUserDetails userDetails) {
-        List<CartItem> cartItems = cartRepo.findByUserId(userDetails.getId());
+        List<CartItem> cartItems = cartRepo.findCartItemsByUserId(userDetails.getId());
         BigDecimal orderCost = BigDecimal.ZERO;
 
         if (cartItems.isEmpty()){
@@ -90,7 +89,7 @@ public class OrderService {
         orderRepo.save(order);
 
         return new PaymentResponse(order.getId(),
-                order.getUser().getEmail(),
+                userDetails.getUsername(),
                 order.getTotalPrice(),
                 order.getPayDate());
     }
