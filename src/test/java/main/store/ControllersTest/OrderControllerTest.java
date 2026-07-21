@@ -32,15 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(OrderController.class)
-public class OrderControllerTest {
+public class OrderControllerTest{
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private OrderService orderService;
 
-    @MockitoBean
-    private org.springframework.cache.CacheManager cacheManager;
     private String json;
 
     @BeforeEach

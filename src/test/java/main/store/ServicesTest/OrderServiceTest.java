@@ -28,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,8 +69,8 @@ public class OrderServiceTest {
         FullOrderOut result = orderService.createOrder(userDetails);
 
         assertNotNull(result);
-        assertEquals("user", userDetails.getRealName());
-        assertEquals("user@gmail.com",userDetails.getUsername());
+        assertEquals("user", result.name());
+        assertEquals("user@gmail.com",result.email());
         assertEquals(Status.CREATED, result.status());
         assertEquals(new BigDecimal("200"), result.price());
         assertEquals(2, result.orderItems().size());
@@ -95,8 +94,7 @@ public class OrderServiceTest {
         CartItem cartItem1 = new CartItem(user, product1, 1);
         CartItem cartItem2 = new CartItem(user, product2, 2);
 
-        List<CartItem> cartItems = List.of(cartItem1, cartItem2);
-        return cartItems;
+        return List.of(cartItem1, cartItem2);
     }
 
     @Test

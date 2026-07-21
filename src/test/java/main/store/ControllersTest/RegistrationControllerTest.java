@@ -25,9 +25,6 @@ public class RegistrationControllerTest {
     @MockitoBean
     private UserService userService;
 
-    @MockitoBean
-    private org.springframework.cache.CacheManager cacheManager;
-
     private String json;
 
     @BeforeEach

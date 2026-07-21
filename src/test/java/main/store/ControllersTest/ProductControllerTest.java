@@ -29,9 +29,6 @@ public class ProductControllerTest {
     @MockitoBean
     private ProductService productService;
 
-    @MockitoBean
-    private org.springframework.cache.CacheManager cacheManager;
-
     @Test
     void getProduct_validTitle() throws Exception {
         ProductOut product = new ProductOut("Phone", new BigDecimal("299.99"), 20);

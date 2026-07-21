@@ -28,9 +28,6 @@ public class CartControllerTest {
     @MockitoBean
     private CartService cartService;
 
-    @MockitoBean
-    private org.springframework.cache.CacheManager cacheManager;
-
     @Test
     void addCartItem_addedSuccessfully() throws Exception{
 
