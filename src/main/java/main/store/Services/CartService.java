@@ -1,5 +1,6 @@
 package main.store.Services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import main.store.DTO.DTOout.CartItemsOut;
@@ -29,17 +30,13 @@ public class CartService {
         Product product = productRepo.getReferenceById(productId);
         User user = userRepo.getReferenceById(userDetails.getId());
 
-        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId());
+        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
+                .orElseGet(() -> new CartItem(user, product, 1));
 
-        if (cartItem == null){
-            cartItem = new CartItem(user, product, 1);
-            cartRepo.save(cartItem);
-        }
-        else {
-            cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
-        }
+        cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
+        cartRepo.save(cartItem);
+
     }
-
 
     public CartItemsOut showCartItems(CustomUserDetails userDetails) {
         return cartItemsOut(userDetails);
@@ -54,13 +51,16 @@ public class CartService {
     @Transactional
     public CartItemsOut decrementCartPosition(long productId, CustomUserDetails userDetails) {
 
-        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId());
+        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
+                .orElseThrow(() -> new EntityNotFoundException("cart item doesnt exist"));
 
         if (cartItem.getItemQuantity() > 1){
             cartItem.setItemQuantity(cartItem.getItemQuantity()-1);
+            cartRepo.save(cartItem);
         }
         else {
             cartRepo.delete(cartItem);
+            cartRepo.flush();
         }
 
         return cartItemsOut(userDetails);
