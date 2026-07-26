@@ -31,7 +31,7 @@ public class CartService {
         User user = userRepo.getReferenceById(userDetails.getId());
 
         CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
-                .orElseGet(() -> new CartItem(user, product, 1));
+                .orElseGet(() -> new CartItem(user, product, 0));
 
         cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
         cartRepo.save(cartItem);
@@ -69,7 +69,9 @@ public class CartService {
     @Transactional
     public CartItemsOut deleteCartPosition(long itemId, CustomUserDetails userDetails){
 
-        cartRepo.deleteByIdAndUserId(itemId, userDetails.getId());
+        if (cartRepo.deleteByIdAndUserId(itemId, userDetails.getId()) == 0) {
+            throw new EntityNotFoundException("INVALID ID: item doesnt exist");
+        }
 
         return cartItemsOut(userDetails);
     }
