@@ -1,5 +1,6 @@
 package main.store.Services;
 
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import main.store.CustomExceptions.EmptyCartException;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -29,7 +31,6 @@ public class OrderService {
     private final UserRepo userRepo;
     private final OrderRepo orderRepo;
     private final OrderItemRepo orderItemRepo;
-
 
     @Transactional
     public FullOrderOut createOrder(CustomUserDetails userDetails) {

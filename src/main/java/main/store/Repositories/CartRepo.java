@@ -20,7 +20,12 @@ public interface CartRepo extends JpaRepository<CartItem, Long> {
     """)
     List<ItemOut> findDTO(@Param("userId") Long userId);
 
-    @Query("SELECT c FROM CartItem c JOIN FETCH c.item WHERE c.user.id = :userId")
+    @Query("""
+        SELECT c FROM CartItem c 
+        JOIN FETCH c.item
+        WHERE c.user.id = :userId
+        ORDER BY c.item.id
+    """)
     List<CartItem> findCartItemsByUserId(@Param("userId") Long userId);
 
     Optional<CartItem> getByItem_IdAndUser_Id(Long itemId, Long userId);
