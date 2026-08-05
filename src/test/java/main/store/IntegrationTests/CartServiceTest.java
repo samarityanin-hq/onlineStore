@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
@@ -27,20 +28,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Testcontainers
-public class CartServiceTest {
+public class CartServiceTest{
 
+    @Container
     @ServiceConnection
     private static PostgreSQLContainer<?> sqlContainer =
             new PostgreSQLContainer<>("postgres:15-alpine");
 
     @Autowired
-    private CartRepo cartRepo;
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private ProductRepo productRepo;
-    @Autowired
     private CartService cartService;
+    @Autowired
+    protected CartRepo cartRepo;
+    @Autowired
+    protected UserRepo userRepo;
+    @Autowired
+    protected ProductRepo productRepo;
 
     private User user;
     private CustomUserDetails userDetails;

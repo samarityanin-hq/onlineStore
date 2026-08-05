@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,17 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Testcontainers
 @DataJpaTest
-public class ProductRepoTest {
-
+public class ProductRepoTest{
+    @Container
     @ServiceConnection
     private static PostgreSQLContainer<?> sqlContainer =
             new PostgreSQLContainer<>("postgres:15-alpine");
-
     @Autowired
-    private ProductRepo productRepo;
+    protected ProductRepo productRepo;
     @Autowired
-    private CategoryRepo categoryRepo;
+    protected CategoryRepo categoryRepo;
     @Autowired
     private TestEntityManager entityManager;
 

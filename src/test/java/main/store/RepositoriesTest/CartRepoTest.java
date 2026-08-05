@@ -15,6 +15,8 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,9 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Testcontainers
 @DataJpaTest
-public class CartRepoTest {
+public class CartRepoTest{
 
+    @Container
     @ServiceConnection
     private static PostgreSQLContainer<?> sqlContainer =
             new PostgreSQLContainer<>("postgres:15-alpine");
