@@ -1,0 +1,123 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-01-users
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column: {name: id, type: BIGINT, autoIncrement: true, constraints: {primaryKey: true}}
+              - column: {name: name, type: VARCHAR(255), constraints: {unique: true}}
+              - column: {name: email, type: VARCHAR(255), constraints: {unique: true}}
+              - column: {name: password_hash, type: VARCHAR(255)}
+              - column: {name: role, type: VARCHAR(255)}
+
+  - changeSet:
+      id: 001-02-category
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: category
+            columns:
+              - column: {name: id, type: BIGINT, autoIncrement: true, constraints: {primaryKey: true}}
+              - column: {name: category_name, type: VARCHAR(255)}
+
+  - changeSet:
+      id: 001-03-products
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column: {name: id, type: BIGINT, autoIncrement: true, constraints: {primaryKey: true}}
+              - column: {name: title, type: VARCHAR(255)}
+              - column: {name: price, type: "NUMERIC(10,2)"}
+              - column: {name: storage_quantity, type: INTEGER}
+              - column: {name: category, type: BIGINT}
+        - addForeignKeyConstraint:
+            baseTableName: products
+            baseColumnNames: category
+            referencedTableName: category
+            referencedColumnNames: id
+            constraintName: fk_products_category
+
+  - changeSet:
+      id: 001-04-cart-sequence
+      author: Ilya
+      changes:
+        - createSequence:
+            sequenceName: cartitemsequence
+            incrementBy: 50
+            startValue: 1
+
+  - changeSet:
+      id: 001-05-cart-items
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: cart_items
+            columns:
+              - column: {name: id, type: BIGINT, constraints: {primaryKey: true}}
+              - column: {name: user_id, type: BIGINT, constraints: {nullable: false}}
+              - column: {name: product_id, type: BIGINT, constraints: {nullable: false}}
+              - column: {name: quantity, type: INTEGER}
+              - column: {name: position_cost, type: "NUMERIC(10,2)"}
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_cart_items_user
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_cart_items_product
+
+  - changeSet:
+      id: 001-06-orders
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column: {name: id, type: BIGINT, autoIncrement: true, constraints: {primaryKey: true}}
+              - column: {name: user_id, type: BIGINT}
+              - column: {name: status, type: VARCHAR(255)}
+              - column: {name: total_price, type: "NUMERIC(10,2)"}
+              - column: {name: total_order_items, type: INTEGER}
+              - column: {name: created_at, type: TIMESTAMP}
+              - column: {name: paid_at, type: TIMESTAMP}
+        - addForeignKeyConstraint:
+            baseTableName: orders
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_orders_user
+
+  - changeSet:
+      id: 001-07-order-items
+      author: Ilya
+      changes:
+        - createTable:
+            tableName: order_items
+            columns:
+              - column: {name: id, type: BIGINT, autoIncrement: true, constraints: {primaryKey: true}}
+              - column: {name: order_id, type: BIGINT, constraints: {nullable: false}}
+              - column: {name: product_id, type: BIGINT, constraints: {nullable: false}}
+              - column: {name: quantity, type: INTEGER}
+              - column: {name: price_at_purchase, type: "NUMERIC(10,2)"}
+              - column: {name: position_cost, type: "NUMERIC(10,2)"}
+        - addForeignKeyConstraint:
+            baseTableName: order_items
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            constraintName: fk_order_items_order
+        - addForeignKeyConstraint:
+            baseTableName: order_items
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_order_items_product

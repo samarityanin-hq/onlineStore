@@ -17,7 +17,7 @@ public class CartItem {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartSequence")
-    @SequenceGenerator(name = "cartSequence", sequenceName = "cartItemSequence", allocationSize = 50)
+    @SequenceGenerator(name = "cartSequence", sequenceName = "cartitemsequence", allocationSize = 50)
     private Long id;
 
     @Setter

@@ -29,7 +29,7 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @Column(name = "total_orderItems")
+    @Column(name = "total_order_items")
     private Integer totalOrderItems;
 
     @Column(name = "created_at")

@@ -1,7 +1,17 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.liquibase:liquibase-core:4.31.1'
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.6'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.liquibase.gradle' version '3.1.0'
 }
 
 group = 'Main'
@@ -19,6 +29,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -28,6 +39,11 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.31.1'
+    liquibaseRuntime 'org.postgresql:postgresql:42.7.3'
+    liquibaseRuntime 'info.picocli:picocli:4.7.5'
+    liquibaseRuntime 'org.apache.commons:commons-lang3:3.14.0'
+    liquibaseRuntime 'org.yaml:snakeyaml:2.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -47,6 +63,18 @@ tasks.named('test') {
         def mockitoJar = configurations.testRuntimeClasspath.find { it.name.contains('mockito-core') }?.absolutePath
         if (mockitoJar) {
             jvmArgs "-javaagent:${mockitoJar}"
+        }
+    }
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile 'db/migration/db.changelog-master.yaml'
+            searchPath 'src/main/resources'
+            url System.getenv('DB_URL')
+            username System.getenv('DB_USERNAME')
+            password System.getenv('DB_PASSWORD')
         }
     }
 }
