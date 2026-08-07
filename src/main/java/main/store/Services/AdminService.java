@@ -1,11 +1,14 @@
 package main.store.Services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.DTOin.ProductToAdd;
-import main.store.DTO.DTOin.UserToAdmin;
-import main.store.DTO.DTOout.CategoryList;
-import main.store.DTO.DTOout.CategoryOut;
+import main.store.DTO.Request.ProductToAdd;
+import main.store.DTO.Request.ProductToUpdate;
+import main.store.DTO.Request.UserToAdmin;
+import main.store.DTO.Response.CategoryList;
+import main.store.DTO.Response.CategoryOut;
+import main.store.DTO.Response.ProductOut;
 import main.store.Entities.Category;
 import main.store.Entities.Product;
 import main.store.Entities.User;
@@ -14,6 +17,7 @@ import main.store.Repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +47,23 @@ public class AdminService {
     }
 
 
+    @Transactional
+    public ProductOut updateProduct(Long productId, ProductToUpdate newInfo){
+        Product product = productRepo.getById(productId)
+                .orElseThrow(()-> new EntityNotFoundException("product not found"));
 
+        Optional.ofNullable(newInfo.newTitle())
+                .ifPresent(product::setTitle);
 
+        Optional.ofNullable(newInfo.newPrice())
+                .ifPresent(product::setPrice);
+
+        Optional.ofNullable(newInfo.newQuantity())
+                .ifPresent(product::setStorageQuantity);
+
+        return new ProductOut(
+                product.getTitle(),
+                product.getPrice(),
+                product.getStorageQuantity());
+    }
 }

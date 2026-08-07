@@ -1,9 +1,9 @@
 package main.store.ControllersTest;
 
 import main.store.Controllers.RegistrationController;
-import main.store.CustomExceptions.UserAlreadyExistsException;
-import main.store.DTO.DTOin.UserRegistration;
-import main.store.DTO.DTOout.UserOut;
+import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
+import main.store.DTO.Request.UserRegistration;
+import main.store.DTO.Response.UserOut;
 import main.store.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

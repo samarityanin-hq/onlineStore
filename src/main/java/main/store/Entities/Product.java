@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import main.store.DTO.DTOin.ProductToAdd;
+import main.store.DTO.Request.ProductToAdd;
 
 import java.math.BigDecimal;
 

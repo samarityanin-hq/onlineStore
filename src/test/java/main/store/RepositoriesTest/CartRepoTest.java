@@ -1,6 +1,6 @@
 package main.store.RepositoriesTest;
 
-import main.store.DTO.DTOout.ItemOut;
+import main.store.DTO.Response.ItemOut;
 import main.store.Entities.CartItem;
 import main.store.Entities.Product;
 import main.store.Entities.User;

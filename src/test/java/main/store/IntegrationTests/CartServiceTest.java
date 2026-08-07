@@ -1,7 +1,7 @@
 package main.store.IntegrationTests;
 
 import jakarta.persistence.EntityNotFoundException;
-import main.store.DTO.DTOout.CartItemsOut;
+import main.store.DTO.Response.CartItemsOut;
 import main.store.Entities.CartItem;
 import main.store.Entities.Product;
 import main.store.Entities.User;

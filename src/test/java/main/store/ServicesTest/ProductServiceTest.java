@@ -1,19 +1,16 @@
 package main.store.ServicesTest;
 
 import jakarta.persistence.EntityNotFoundException;
-import main.store.DTO.DTOout.CategoryList;
-import main.store.DTO.DTOout.CategoryOut;
-import main.store.DTO.DTOout.ProductOut;
-import main.store.Entities.Category;
+import main.store.DTO.Response.CategoryList;
+import main.store.DTO.Response.CategoryOut;
+import main.store.DTO.Response.ProductOut;
 import main.store.Repositories.CategoryRepo;
 import main.store.Repositories.ProductRepo;
 import main.store.Services.ProductService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

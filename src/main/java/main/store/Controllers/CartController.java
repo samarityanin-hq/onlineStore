@@ -3,7 +3,7 @@ package main.store.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.DTOout.CartItemsOut;
+import main.store.DTO.Response.CartItemsOut;
 import main.store.Security.CustomUserDetails;
 import main.store.Services.CartService;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package main.store.CustomExceptions;
+package main.store.Exceptions.CustomExceptions;
 
 import lombok.Getter;
 

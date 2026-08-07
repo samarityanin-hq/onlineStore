@@ -3,7 +3,7 @@ package main.store.Entities;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import main.store.DTO.DTOin.UserRegistration;
+import main.store.DTO.Request.UserRegistration;
 import jakarta.persistence.*;
 import main.store.Enums.UserRole;
 

@@ -1,12 +1,12 @@
 package main.store.ServicesTest;
 
-import main.store.CustomExceptions.EmptyCartException;
-import main.store.CustomExceptions.InvalidPaymentAmountException;
-import main.store.CustomExceptions.OrderAlreadyPaidException;
-import main.store.CustomExceptions.ProductOutOfStockException;
-import main.store.DTO.DTOin.PaymentIn;
-import main.store.DTO.DTOout.FullOrderOut;
-import main.store.DTO.DTOout.PaymentResponse;
+import main.store.Exceptions.CustomExceptions.EmptyCartException;
+import main.store.Exceptions.CustomExceptions.InvalidPaymentAmountException;
+import main.store.Exceptions.CustomExceptions.OrderAlreadyPaidException;
+import main.store.Exceptions.CustomExceptions.ProductOutOfStockException;
+import main.store.DTO.Request.PaymentIn;
+import main.store.DTO.Response.FullOrderOut;
+import main.store.DTO.Response.PaymentResponse;
 import main.store.Entities.CartItem;
 import main.store.Entities.Order;
 import main.store.Entities.Product;

@@ -3,7 +3,7 @@ package main.store.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.DTOout.UserOut;
+import main.store.DTO.Response.UserOut;
 import main.store.Security.CustomUserDetails;
 import main.store.Services.UserService;
 import org.slf4j.Logger;

@@ -2,14 +2,11 @@ package main.store.ControllersTest;
 
 import jakarta.persistence.EntityNotFoundException;
 import main.store.Controllers.ProductController;
-import main.store.DTO.DTOout.ExceptionResponse;
-import main.store.DTO.DTOout.ProductOut;
+import main.store.DTO.Response.ProductOut;
 import main.store.Services.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.*;

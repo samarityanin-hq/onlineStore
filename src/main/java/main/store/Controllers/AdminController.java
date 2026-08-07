@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.DTOout.CategoryList;
-import main.store.DTO.DTOin.ProductToAdd;
-import main.store.DTO.DTOin.UserToAdmin;
+import main.store.DTO.Request.ProductToUpdate;
+import main.store.DTO.Response.CategoryList;
+import main.store.DTO.Request.ProductToAdd;
+import main.store.DTO.Request.UserToAdmin;
+import main.store.DTO.Response.ProductOut;
 import main.store.Services.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,17 @@ public class AdminController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @Operation(summary = "Обновить продукт")
+    @PatchMapping("/updateProduct/{product_id}")
+    public ResponseEntity<ProductOut> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody ProductToUpdate newInfo) {
+        log.info("called method updateProduct");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(adminService.updateProduct(productId, newInfo));
     }
 
     @Operation(summary = "Повысить обычного юзера до админа")

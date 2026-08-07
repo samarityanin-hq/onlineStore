@@ -1,4 +1,4 @@
-package main.store.DTO.DTOout;
+package main.store.DTO.Response;
 
 public record ExceptionResponse(
         int status,

@@ -1,7 +1,6 @@
 package main.store.Repositories;
 
-import jakarta.transaction.Transactional;
-import main.store.DTO.DTOout.ItemOut;
+import main.store.DTO.Response.ItemOut;
 import main.store.Entities.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +13,7 @@ import java.util.Optional;
 public interface CartRepo extends JpaRepository<CartItem, Long> {
 
     @Query("""
-        SELECT new main.store.DTO.DTOout.ItemOut(i.item.title, i.itemQuantity,i.positionCost)
+        SELECT new main.store.DTO.Response.ItemOut(i.item.title, i.itemQuantity,i.positionCost)
         FROM CartItem i
         WHERE i.user.id = :userId
     """)

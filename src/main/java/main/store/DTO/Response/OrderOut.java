@@ -1,4 +1,4 @@
-package main.store.DTO.DTOout;
+package main.store.DTO.Response;
 
 import main.store.Enums.Status;
 

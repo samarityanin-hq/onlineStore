@@ -46,7 +46,7 @@ databaseChangeLog:
       author: Ilya
       changes:
         - createSequence:
-            sequenceName: cartitemsequence
+            sequenceName: cart_item_sequence
             incrementBy: 50
             startValue: 1
 

@@ -1,4 +1,4 @@
-package main.store.DTO.DTOout;
+package main.store.DTO.Response;
 
 import java.math.BigDecimal;
 import java.util.List;

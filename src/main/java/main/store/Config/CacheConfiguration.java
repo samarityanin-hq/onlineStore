@@ -1,4 +1,4 @@
-package main.store;
+package main.store.Config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;

@@ -1,17 +1,16 @@
 package main.store.Services;
 
-import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import main.store.CustomExceptions.EmptyCartException;
-import main.store.CustomExceptions.InvalidPaymentAmountException;
-import main.store.CustomExceptions.OrderAlreadyPaidException;
-import main.store.CustomExceptions.ProductOutOfStockException;
-import main.store.DTO.DTOin.PaymentIn;
-import main.store.DTO.DTOout.FullOrderOut;
-import main.store.DTO.DTOout.OrderItemOut;
-import main.store.DTO.DTOout.OrderOut;
-import main.store.DTO.DTOout.PaymentResponse;
+import main.store.Exceptions.CustomExceptions.EmptyCartException;
+import main.store.Exceptions.CustomExceptions.InvalidPaymentAmountException;
+import main.store.Exceptions.CustomExceptions.OrderAlreadyPaidException;
+import main.store.Exceptions.CustomExceptions.ProductOutOfStockException;
+import main.store.DTO.Request.PaymentIn;
+import main.store.DTO.Response.FullOrderOut;
+import main.store.DTO.Response.OrderItemOut;
+import main.store.DTO.Response.OrderOut;
+import main.store.DTO.Response.PaymentResponse;
 import main.store.Entities.*;
 import main.store.Enums.Status;
 import main.store.Repositories.*;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service

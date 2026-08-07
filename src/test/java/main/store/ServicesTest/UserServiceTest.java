@@ -1,8 +1,8 @@
 package main.store.ServicesTest;
 
-import main.store.CustomExceptions.UserAlreadyExistsException;
-import main.store.DTO.DTOin.UserRegistration;
-import main.store.DTO.DTOout.UserOut;
+import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
+import main.store.DTO.Request.UserRegistration;
+import main.store.DTO.Response.UserOut;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

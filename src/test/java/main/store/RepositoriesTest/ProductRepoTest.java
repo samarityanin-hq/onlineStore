@@ -1,6 +1,6 @@
 package main.store.RepositoriesTest;
 
-import main.store.DTO.DTOout.ProductOut;
+import main.store.DTO.Response.ProductOut;
 import main.store.Entities.Category;
 import main.store.Entities.Product;
 import main.store.Repositories.CategoryRepo;

@@ -1,9 +1,9 @@
-package main.store.ExceptionHandler;
+package main.store.Exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
-import main.store.CustomExceptions.*;
-import main.store.DTO.DTOout.ExceptionResponse;
+import main.store.DTO.Response.ExceptionResponse;
 import main.store.Enums.HttpCodeResponse;
+import main.store.Exceptions.CustomExceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

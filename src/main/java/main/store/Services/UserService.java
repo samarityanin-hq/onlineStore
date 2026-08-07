@@ -2,9 +2,9 @@ package main.store.Services;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import main.store.CustomExceptions.UserAlreadyExistsException;
-import main.store.DTO.DTOout.UserOut;
-import main.store.DTO.DTOin.UserRegistration;
+import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
+import main.store.DTO.Response.UserOut;
+import main.store.DTO.Request.UserRegistration;
 import main.store.Security.CustomUserDetails;
 import main.store.Entities.User;
 import main.store.Repositories.CartRepo;

@@ -1,6 +1,6 @@
 package main.store.Repositories;
 
-import main.store.DTO.DTOout.ProductOut;
+import main.store.DTO.Response.ProductOut;
 import main.store.Entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
     @Query("""
-        SELECT new main.store.DTO.DTOout.ProductOut(p.title, p.price, p.storageQuantity)
+        SELECT new main.store.DTO.Response.ProductOut(p.title, p.price, p.storageQuantity)
         FROM Product p
         WHERE p.title = :title
     """)
@@ -21,13 +21,13 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
 
     @Query("""
-    SELECT new main.store.DTO.DTOout.ProductOut(p.title, p.price, p.storageQuantity)
+    SELECT new main.store.DTO.Response.ProductOut(p.title, p.price, p.storageQuantity)
         FROM Product p
     """)
     Page<ProductOut> getProductList(Pageable pageable);
 
     @Query("""
-    SELECT new main.store.DTO.DTOout.ProductOut(p.title, p.price, p.storageQuantity)
+    SELECT new main.store.DTO.Response.ProductOut(p.title, p.price, p.storageQuantity)
     FROM Product p
     WHERE p.category.name = :categoryName
 """)
@@ -35,4 +35,5 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
                                         Pageable pageable);
 
 
+    Optional<Product> getById(Long id);
 }

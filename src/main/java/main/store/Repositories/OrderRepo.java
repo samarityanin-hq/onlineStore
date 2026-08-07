@@ -1,6 +1,6 @@
 package main.store.Repositories;
 
-import main.store.DTO.DTOout.OrderOut;
+import main.store.DTO.Response.OrderOut;
 import main.store.Entities.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +14,7 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
 
     @Query("""
-    SELECT new main.store.DTO.DTOout.OrderOut(
+    SELECT new main.store.DTO.Response.OrderOut(
         o.status, o.totalPrice, o.totalOrderItems, o.dateTime, o.payDate)
     FROM Order o
     WHERE o.user.id = :userId
