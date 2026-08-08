@@ -34,6 +34,7 @@ public class ProductService {
         return productRepo.getProductList(pageable);
     }
 
+    @Cacheable(value = "categories")
     public CategoryList getCategories() {
         List<CategoryOut> categories = categoryRepo.getAllCategories();
 
