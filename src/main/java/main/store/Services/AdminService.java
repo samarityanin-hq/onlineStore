@@ -14,6 +14,7 @@ import main.store.Entities.Product;
 import main.store.Entities.User;
 import main.store.Enums.UserRole;
 import main.store.Repositories.*;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,10 +47,10 @@ public class AdminService {
         user.setRole(UserRole.ROLE_ADMIN);
     }
 
-
+    @CacheEvict(value = "products", key = "#product.title")
     @Transactional
     public ProductOut updateProduct(Long productId, ProductToUpdate newInfo){
-        Product product = productRepo.getById(productId)
+        Product product = productRepo.getProductById(productId)
                 .orElseThrow(()-> new EntityNotFoundException("product not found"));
 
         Optional.ofNullable(newInfo.newTitle())

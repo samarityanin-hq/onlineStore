@@ -35,5 +35,5 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
                                         Pageable pageable);
 
 
-    Optional<Product> getById(Long id);
+    Optional<Product> getProductById(Long id);
 }
