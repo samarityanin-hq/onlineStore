@@ -20,6 +20,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @Column(name = "title")
     private String title;
 

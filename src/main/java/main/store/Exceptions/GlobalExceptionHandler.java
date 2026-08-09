@@ -1,6 +1,7 @@
 package main.store.Exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import main.store.DTO.Response.ExceptionResponse;
 import main.store.Enums.HttpCodeResponse;
 import main.store.Exceptions.CustomExceptions.*;
@@ -121,6 +122,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ExceptionResponse> handleOptimisticLockExc(OptimisticLockException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(409)
+                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(),
+                        "The item was just purchased, please try placing your order again."));
     }
 
     @ExceptionHandler(Exception.class)

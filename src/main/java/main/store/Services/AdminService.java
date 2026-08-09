@@ -17,6 +17,7 @@ import main.store.Exceptions.CustomExceptions.DtoMatchException;
 import main.store.Repositories.*;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,8 @@ public class AdminService {
 
     @Transactional
     public void promoteToAdmin(UserToAdmin userToAdmin) {
-        User user = userRepo.findByEmail(userToAdmin.email());
+        User user = userRepo.findByEmail(userToAdmin.email())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userToAdmin.email() + " not found"));
         user.setRole(UserRole.ROLE_ADMIN);
     }
 

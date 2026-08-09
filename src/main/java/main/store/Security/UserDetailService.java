@@ -21,12 +21,8 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(email);
-
-        if (user == null){
-            throw new UsernameNotFoundException("User with email: " + email + " not found");
-        }
-
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
         return new CustomUserDetails(user,
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
 

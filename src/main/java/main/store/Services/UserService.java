@@ -10,6 +10,7 @@ import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
 import main.store.Enums.UserRole;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,8 @@ public class UserService {
     }
 
     public UserOut getCurrentUser(CustomUserDetails userDetails){
-        User user = userRepo.findByEmail(userDetails.getUsername());
+        User user = userRepo.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userDetails.getUsername() + " not found"));
         return convertToUserOut(user);
     }
 
