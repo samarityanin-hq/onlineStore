@@ -13,11 +13,14 @@ import main.store.Entities.Category;
 import main.store.Entities.Product;
 import main.store.Entities.User;
 import main.store.Enums.UserRole;
+import main.store.Exceptions.CustomExceptions.DtoMatchException;
 import main.store.Repositories.*;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,6 +31,7 @@ public class AdminService {
     private final ProductRepo productRepo;
     private final OrderRepo orderRepo;
     private final CategoryRepo categoryRepo;
+    private final CacheManager cacheManager;
 
 
     public void addProduct(ProductToAdd product){
@@ -47,11 +51,15 @@ public class AdminService {
         user.setRole(UserRole.ROLE_ADMIN);
     }
 
-    @CacheEvict(value = "products", key = "#product.title")
+    @CacheEvict(value = "products", key = "#newInfo.oldTitle()")
     @Transactional
     public ProductOut updateProduct(Long productId, ProductToUpdate newInfo){
         Product product = productRepo.getProductById(productId)
                 .orElseThrow(()-> new EntityNotFoundException("product not found"));
+
+        if (!product.getTitle().equals(newInfo.oldTitle())){
+            throw new DtoMatchException(product.getTitle(), newInfo.oldTitle());
+        }
 
         Optional.ofNullable(newInfo.newTitle())
                 .ifPresent(product::setTitle);
@@ -66,5 +74,17 @@ public class AdminService {
                 product.getTitle(),
                 product.getPrice(),
                 product.getStorageQuantity());
+    }
+
+
+    @Transactional
+    public void deleteProduct(Long productId){
+        Product product = productRepo.findById(productId)
+                .orElseThrow(()-> new EntityNotFoundException("product not found"));
+
+        productRepo.deleteById(productId);
+
+        Objects.requireNonNull(cacheManager.getCache("products")).evict(product.getTitle());
+
     }
 }

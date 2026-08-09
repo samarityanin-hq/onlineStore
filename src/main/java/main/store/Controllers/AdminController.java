@@ -27,7 +27,7 @@ public class AdminController {
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
     @Operation(summary = "Показать доступные категории")
-    @GetMapping("/addProduct/getCategories")
+    @GetMapping("/products/getCategories")
     public ResponseEntity<CategoryList> getCategories(){
         log.info("called admin method getCategories");
         return ResponseEntity
@@ -36,7 +36,7 @@ public class AdminController {
     }
 
     @Operation(summary = "Добавить продукт")
-    @PostMapping("/addProduct/createProduct")
+    @PostMapping("/products/createProduct")
     public ResponseEntity<Void> addProduct(
             @Valid @RequestBody ProductToAdd product){
         log.info("called admin method addProduct");
@@ -47,18 +47,30 @@ public class AdminController {
     }
 
     @Operation(summary = "Обновить продукт")
-    @PatchMapping("/updateProduct/{product_id}")
+    @PatchMapping("/products/update/{productId}")
     public ResponseEntity<ProductOut> updateProduct(
             @PathVariable Long productId,
-            @RequestBody ProductToUpdate newInfo) {
+            @Valid @RequestBody ProductToUpdate newInfo) {
         log.info("called method updateProduct");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(adminService.updateProduct(productId, newInfo));
     }
 
+    @Operation(summary = "Удалить продукт")
+    @DeleteMapping("/products/delete/{productId}")
+    public ResponseEntity<Void> deleteProduct(
+            @PathVariable Long productId
+    ){
+        log.info("called method deleteProduct");
+        adminService.deleteProduct(productId);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
     @Operation(summary = "Повысить обычного юзера до админа")
-    @PostMapping("/promoteToAdmin")
+    @PostMapping("/users/promoteToAdmin")
     public ResponseEntity<Void> promoteToAdmin(
             @RequestBody UserToAdmin user
             ){

@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 public record ProductToUpdate(
         @Size(max = 30, message = "title is to long")
+        String oldTitle,
+        @Size(max = 30, message = "title is to long")
         String newTitle,
         @Positive(message = "price cannot be negative")
         BigDecimal newPrice,
