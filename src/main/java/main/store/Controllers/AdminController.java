@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import main.store.DTO.Request.ProductToUpdate;
-import main.store.DTO.Response.CategoryList;
 import main.store.DTO.Request.ProductToAdd;
 import main.store.DTO.Request.UserToAdmin;
+import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
 import main.store.Services.AdminService;
 import org.slf4j.Logger;
@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Контроллер админа", description = "Доступно только пользователям со статусом админа")
 @RestController
@@ -28,7 +30,7 @@ public class AdminController {
 
     @Operation(summary = "Показать доступные категории")
     @GetMapping("/products/getCategories")
-    public ResponseEntity<CategoryList> getCategories(){
+    public ResponseEntity<List<CategoryOut>> getCategories(){
         log.info("called admin method getCategories");
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -2,7 +2,6 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.Response.CategoryList;
 import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
 import main.store.Repositories.CategoryRepo;
@@ -35,10 +34,8 @@ public class ProductService {
     }
 
     @Cacheable(value = "categories")
-    public CategoryList getCategories() {
-        List<CategoryOut> categories = categoryRepo.getAllCategories();
-
-        return new CategoryList(categories);
+    public List<CategoryOut> getCategories() {
+        return categoryRepo.getAllCategories();
     }
 
     public Page<ProductOut> sortByCategory(String categoryName, Pageable pageable) {

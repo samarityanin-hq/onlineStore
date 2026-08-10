@@ -1,7 +1,6 @@
 package main.store.ServicesTest;
 
 import jakarta.persistence.EntityNotFoundException;
-import main.store.DTO.Response.CategoryList;
 import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
 import main.store.Repositories.CategoryRepo;
@@ -91,12 +90,12 @@ public class ProductServiceTest {
         when(categoryRepo.getAllCategories())
                 .thenReturn(List.of(category1, category2));
 
-        CategoryList result = productService.getCategories();
+        List<CategoryOut> result = productService.getCategories();
 
         assertNotNull(result);
-        assertEquals(2, result.categories().size());
-        assertEquals("Phones", result.categories().get(0).name());
-        assertEquals("Earphones", result.categories().get(1).name());
+        assertEquals(2, result.size());
+        assertEquals("Phones", result.get(0).name());
+        assertEquals("Earphones", result.get(1).name());
 
         verify(categoryRepo).getAllCategories();
     }

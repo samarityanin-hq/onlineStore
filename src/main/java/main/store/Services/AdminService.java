@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import main.store.DTO.Request.ProductToAdd;
 import main.store.DTO.Request.ProductToUpdate;
 import main.store.DTO.Request.UserToAdmin;
-import main.store.DTO.Response.CategoryList;
 import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
 import main.store.Entities.Category;
@@ -41,9 +40,8 @@ public class AdminService {
         productRepo.save(newProduct);
     }
 
-    public CategoryList getCategories() {
-        List<CategoryOut> categories = categoryRepo.getAllCategories();
-        return new CategoryList(categories);
+    public List<CategoryOut> getCategories() {
+        return categoryRepo.getAllCategories();
     }
 
     @Transactional

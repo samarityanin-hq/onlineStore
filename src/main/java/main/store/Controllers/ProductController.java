@@ -3,7 +3,7 @@ package main.store.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.Response.CategoryList;
+import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
 import main.store.Services.ProductService;
 import org.slf4j.Logger;
@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Контроллер продуктов")
 @RestController
@@ -37,7 +39,7 @@ public class ProductController {
 
     @Operation(summary = "Получить список категорий")
     @GetMapping("/categories")
-    public ResponseEntity<CategoryList> getCategory(){
+    public ResponseEntity<List<CategoryOut>> getCategory(){
         log.info("called method getCategories");
         return ResponseEntity
                 .status(HttpStatus.OK)
