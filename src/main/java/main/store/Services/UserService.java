@@ -2,6 +2,9 @@ package main.store.Services;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import main.store.Config.JwtService;
+import main.store.DTO.Request.UserCredentials;
+import main.store.DTO.Response.JwtAuthentication;
 import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
 import main.store.DTO.Response.UserOut;
 import main.store.DTO.Request.UserRegistration;
@@ -10,6 +13,10 @@ import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
 import main.store.Repositories.UserRepo;
 import main.store.Enums.UserRole;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +27,8 @@ public class UserService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
     private final CartRepo cartRepo;
 
 
@@ -54,4 +63,17 @@ public class UserService {
         return new UserOut(user.getName(), user.getEmail(), cartProductCount);
     }
 
+    public JwtAuthentication login(@Valid UserCredentials credentials) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        credentials.email(),
+                        credentials.password()
+                )
+        );
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwtService.generateAuthToken(userDetails.getUser());
+
+    }
 }

@@ -1,8 +1,10 @@
 package main.store.Security;
 
+import lombok.Getter;
 import main.store.Entities.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -10,6 +12,7 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
+    @Getter
     private final User user;
     private final Collection<? extends GrantedAuthority> authorities;
 
