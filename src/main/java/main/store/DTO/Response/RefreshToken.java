@@ -1,4 +1,4 @@
-package main.store.DTO.Request;
+package main.store.DTO.Response;
 
 public record RefreshToken(
         String refreshToken

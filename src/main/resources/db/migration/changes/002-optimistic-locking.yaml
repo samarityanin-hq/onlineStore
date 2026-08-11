@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - addColumn:
             tableName: products
-            column: {name: version, type BIGINT, defaultValueNumeric: 0, constraints:{nullable: false}}
+            column: {name: version, type: BIGINT, defaultValueNumeric: 0, constraints:{nullable: false}}
 
   - changeSet:
       id: 002-002-order-version
@@ -13,4 +13,4 @@ databaseChangeLog:
       changes:
         - addColumn:
             tableName: orders
-            column: {name: version, type BIGINT, defaultValueNumeric: 0, constraints:{nullable: false}}
+            column: {name: version, type: BIGINT, defaultValueNumeric: 0, constraints:{nullable: false}}
