@@ -1,10 +1,13 @@
 package main.store.Services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import main.store.Config.JwtService;
 import main.store.DTO.Request.UserCredentials;
 import main.store.DTO.Response.JwtAuthentication;
+import main.store.DTO.Response.RefreshToken;
+import main.store.Exceptions.CustomExceptions.InvalidTokenException;
 import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
 import main.store.DTO.Response.UserOut;
 import main.store.DTO.Request.UserRegistration;
@@ -20,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -75,5 +80,24 @@ public class UserService {
 
         return jwtService.generateAuthToken(userDetails.getUser());
 
+    }
+
+
+
+    public void logout(RefreshToken refreshToken) {
+        jwtService.logout(refreshToken.refreshToken());
+    }
+
+    public JwtAuthentication refreshToken(RefreshToken refreshToken) {
+        String oldRefreshToken = refreshToken.refreshToken();
+        String email = jwtService.getEmailFromToken(refreshToken.refreshToken());
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
+
+        if (!jwtService.isRefreshToken(oldRefreshToken) || !jwtService.validateJwtToken(oldRefreshToken)){
+            throw new InvalidTokenException("Refresh token expired or already used");
+        }
+
+        return jwtService.refreshAuthToken(user, oldRefreshToken);
     }
 }
