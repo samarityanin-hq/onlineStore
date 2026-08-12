@@ -1,12 +1,10 @@
 package main.store.Services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import main.store.Config.JwtService;
 import main.store.DTO.Request.UserCredentials;
 import main.store.DTO.Response.JwtAuthentication;
-import main.store.DTO.Response.RefreshToken;
 import main.store.Exceptions.CustomExceptions.InvalidTokenException;
 import main.store.Exceptions.CustomExceptions.UserAlreadyExistsException;
 import main.store.DTO.Response.UserOut;
@@ -24,7 +22,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -84,13 +81,12 @@ public class UserService {
 
 
 
-    public void logout(RefreshToken refreshToken) {
-        jwtService.logout(refreshToken.refreshToken());
+    public void logout(String refreshToken) {
+        jwtService.logout(refreshToken);
     }
 
-    public JwtAuthentication refreshToken(RefreshToken refreshToken) {
-        String oldRefreshToken = refreshToken.refreshToken();
-        String email = jwtService.getEmailFromToken(refreshToken.refreshToken());
+    public JwtAuthentication refreshToken(String oldRefreshToken) {
+        String email = jwtService.getEmailFromToken(oldRefreshToken);
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
 

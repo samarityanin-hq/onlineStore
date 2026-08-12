@@ -5,6 +5,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import main.store.DTO.Response.JwtAuthentication;
 import main.store.Entities.User;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtService {
@@ -34,8 +36,6 @@ public class JwtService {
     private Duration refreshTtl;
     @Value("${JWT_SECRET}")
     private String jwtSecret;
-
-    private static final Logger LOGGER = LogManager.getLogger(JwtService.class);
 
     private final StringRedisTemplate redisTemplate;
 
@@ -56,8 +56,6 @@ public class JwtService {
         );
     }
 
-
-
     public void logout(String refreshToken){
         String jti = getClaim(refreshToken, "jti", String.class);
         redisTemplate.delete(REFRESH_KEY_PREFIX+jti);
@@ -68,7 +66,7 @@ public class JwtService {
     }
 
     public String getRoleFromToken(String token){
-        return getClaim(token, "tole", String.class);
+        return getClaim(token, "role", String.class);
     }
 
     public boolean isAccessToken(String token){
@@ -87,15 +85,15 @@ public class JwtService {
             parseClaims(token);
             return true;
         }catch (ExpiredJwtException exception){
-            LOGGER.info("Token expired: {}", exception.getMessage());
+            log.info("Token expired: {}", exception.getMessage());
         }catch (UnsupportedJwtException exception){
-            LOGGER.warn("Unsupported token: {}", exception.getMessage());
+            log.warn("Unsupported token: {}", exception.getMessage());
         }catch (MalformedJwtException exception){
-            LOGGER.warn("Malformed token: {}", exception.getMessage());
+            log.warn("Malformed token: {}", exception.getMessage());
         }catch (SecurityException exception){
-            LOGGER.warn("Invalid token signature: {}", exception.getMessage());
+            log.warn("Invalid token signature: {}", exception.getMessage());
         }catch (Exception exception){
-            LOGGER.error("Unexpected error: {}", exception.getMessage());
+            log.error("Unexpected error: {}", exception.getMessage());
         }
         return false;
     }
