@@ -4,11 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import main.store.Controllers.ProductController;
 import main.store.DTO.Response.ProductOut;
 import main.store.Services.ProductService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,13 +21,15 @@ import java.math.BigDecimal;
 
 
 @WebMvcTest(value = ProductController.class)
-public class ProductControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class ProductControllerTest extends AbstractWebTests{
 
     @MockitoBean
     private ProductService productService;
+
+    @BeforeEach
+    void setUp(){
+        setUpConfig();
+    }
 
     @Test
     void getProduct_validTitle() throws Exception {

@@ -30,6 +30,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -134,7 +135,7 @@ public class OrderServiceTest {
         order.setUser(user);
         PaymentIn payment = new PaymentIn(new BigDecimal("100"));
 
-        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(order);
+        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(Optional.of(order));
 
         PaymentResponse result = orderService.pay(payment, 1L, userDetails);
 
@@ -156,7 +157,7 @@ public class OrderServiceTest {
         order.setStatus(Status.PAID);
         PaymentIn payment = new PaymentIn(new BigDecimal("100"));
 
-        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(order);
+        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(Optional.of(order));
 
         assertThrows(OrderAlreadyPaidException.class,
                 () -> orderService.pay(payment, 1L, userDetails));
@@ -172,7 +173,7 @@ public class OrderServiceTest {
         order.setTotalPrice(new BigDecimal("100"));
         PaymentIn payment = new PaymentIn(new BigDecimal("50"));
 
-        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(order);
+        when(orderRepo.findByUserIdAndOrderId(userDetails.getId(), 1L)).thenReturn(Optional.of(order));
 
         assertThrows(InvalidPaymentAmountException.class,
                 () -> orderService.pay(payment, 1L, userDetails));

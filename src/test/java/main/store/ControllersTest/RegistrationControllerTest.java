@@ -12,24 +12,24 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = RegistrationController.class)
-public class RegistrationControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+public class RegistrationControllerTest extends AbstractWebTests{
 
     @MockitoBean
     private UserService userService;
 
-    private String json;
+    private String registrationForm;
 
     @BeforeEach
     void setUp(){
-        json = """
+        setUpConfig();
+        registrationForm = """
                 {
                 "name":"name",
                 "email":"name@email.en",
@@ -50,7 +50,7 @@ public class RegistrationControllerTest {
 
         mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(registrationForm))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("name"))
                 .andExpect(jsonPath("$.email").value("name@email.en"))
@@ -67,7 +67,7 @@ public class RegistrationControllerTest {
 
         mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(registrationForm))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.message")

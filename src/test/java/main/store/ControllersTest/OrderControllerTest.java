@@ -1,5 +1,7 @@
 package main.store.ControllersTest;
 
+import main.store.Config.JwtService;
+import main.store.Config.RateLimiter;
 import main.store.Controllers.OrderController;
 import main.store.Exceptions.CustomExceptions.EmptyCartException;
 import main.store.Exceptions.CustomExceptions.InvalidPaymentAmountException;
@@ -11,17 +13,22 @@ import main.store.DTO.Response.OrderItemOut;
 import main.store.DTO.Response.PaymentResponse;
 import main.store.Enums.Status;
 import main.store.Security.CustomUserDetails;
+import main.store.Security.UserDetailService;
 import main.store.Services.OrderService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,9 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(OrderController.class)
-public class OrderControllerTest{
+public class OrderControllerTest extends AbstractWebTests{
     @Autowired
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @MockitoBean
     private OrderService orderService;
@@ -43,16 +50,18 @@ public class OrderControllerTest{
 
     @BeforeEach
     void setUp(){
+        setUpConfig();
         json = """
                 {
                 "amount": "999.99"
                 }
                 """;
+
     }
 
     @Test
-    @WithMockUser
     void createOrder_createdSuccessfully() throws Exception {
+
         OrderItemOut mockItem = new OrderItemOut("Item_X", 2, new BigDecimal("399.99"));
 
         FullOrderOut mockResponse = new FullOrderOut(
@@ -63,10 +72,14 @@ public class OrderControllerTest{
                 List.of(mockItem)
         );
 
-        when(orderService.createOrder(any(CustomUserDetails.class)))
+
+        when(orderService.createOrder(userDetails))
                 .thenReturn(mockResponse);
 
-        mockMvc.perform(post("/orders/createOrder"))
+        System.out.println(mockResponse);
+
+        mockMvc.perform(post("/orders/createOrder")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("user@email.com"))
                 .andExpect(jsonPath("$.status").value("CREATED"))
@@ -77,12 +90,12 @@ public class OrderControllerTest{
     }
 
     @Test
-    @WithMockUser
     void createOrder_emptyCart() throws Exception {
-        when(orderService.createOrder(any(CustomUserDetails.class)))
+        when(orderService.createOrder(userDetails))
                 .thenThrow(new EmptyCartException("user@email.com", "user"));
 
-        mockMvc.perform(post("/orders/createOrder"))
+        mockMvc.perform(post("/orders/createOrder")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.message")
@@ -93,12 +106,12 @@ public class OrderControllerTest{
     }
 
     @Test
-    @WithMockUser
     void createOrder_productOutOfStock() throws Exception {
         when(orderService.createOrder(any(CustomUserDetails.class)))
                 .thenThrow(new ProductOutOfStockException("product_X", 1L));
 
-        mockMvc.perform(post("/orders/createOrder"))
+        mockMvc.perform(post("/orders/createOrder")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.message")
@@ -109,7 +122,6 @@ public class OrderControllerTest{
     }
 
     @Test
-    @WithMockUser
     void pay_paySuccessfully() throws Exception {
         PaymentResponse response = new PaymentResponse(
                 1L,
@@ -121,6 +133,7 @@ public class OrderControllerTest{
                 .thenReturn(response);
 
         mockMvc.perform(post("/orders/1/pay")
+                        .header("Authorization", "Bearer " + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -133,13 +146,13 @@ public class OrderControllerTest{
     }
 
     @Test
-    @WithMockUser
     void pay_orderAlreadyPaid() throws Exception {
 
         when(orderService.pay(any(PaymentIn.class), eq(1L), any(CustomUserDetails.class)))
                 .thenThrow(new OrderAlreadyPaidException(1L));
 
         mockMvc.perform(post("/orders/1/pay")
+                    .header("Authorization", "Bearer " + accessToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
                 .andExpect(status().isConflict())
@@ -152,13 +165,13 @@ public class OrderControllerTest{
     }
 
     @Test
-    @WithMockUser
     void pay_invalidPaymentAmount() throws Exception {
 
         when(orderService.pay(any(PaymentIn.class), eq(1L), any(CustomUserDetails.class)))
                 .thenThrow(new InvalidPaymentAmountException(1L, new BigDecimal("999.99"), new BigDecimal("500")));
 
         mockMvc.perform(post("/orders/1/pay")
+                    .header("Authorization", "Bearer " + accessToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
                 .andExpect(status().isConflict())
