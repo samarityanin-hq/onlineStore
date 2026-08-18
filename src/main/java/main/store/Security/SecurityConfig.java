@@ -31,9 +31,20 @@ public class SecurityConfig {
 
     @Bean
     public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter jwtFilter) {
+        // JwtFilter уже добавлен в цепочку через SecurityConfig.addFilterBefore(...).
+        // Без этого отключения Spring Boot автоматически регистрирует его ЕЩЁ РАЗ
+        // как отдельный сервлет-фильтр на /*, и он выполняется дважды за запрос.
         FilterRegistrationBean<JwtFilter> registration =
                 new FilterRegistrationBean<>(jwtFilter);
+        registration.setEnabled(false);
 
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<RateLimiterFilter> jwtFilterRegistration(RateLimiterFilter rateLimiterFilter) {
+        FilterRegistrationBean<RateLimiterFilter> registration =
+                new FilterRegistrationBean<>(rateLimiterFilter);
         registration.setEnabled(false);
 
         return registration;
