@@ -6,18 +6,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import main.store.DTO.Request.UserCredentials;
 import main.store.DTO.Response.JwtAuthentication;
-import main.store.DTO.Response.RefreshToken;
 import main.store.DTO.Response.UserOut;
 import main.store.Security.CustomUserDetails;
 import main.store.Services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Ref;
+import java.time.Duration;
 
 @Tag(name = "Проверка сессии")
 @RestController
@@ -26,40 +27,60 @@ import java.sql.Ref;
 public class AuthController {
 
     private final UserService userService;
-
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
+    @Value("${jwt.refresh-ttl}")
+    private Duration refreshTtl;
+    private final String REFRESH_COOKIE = "refreshToken";
 
     @Operation(summary = "Логин юзера")
     @PostMapping("/login")
     public ResponseEntity<JwtAuthentication> login(
             @Valid @RequestBody UserCredentials credentials
     ){
+        JwtAuthentication token = userService.login(credentials);
+        ResponseCookie cookie = buildRefreshCookie(token.refreshToken());
+
         log.info("Called method login");
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.login(credentials));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(token);
     }
 
     @Operation(summary = "Обновить токен")
     @PostMapping("/refreshToken")
     public ResponseEntity<JwtAuthentication> refreshToken(
-            @RequestBody RefreshToken refreshToken
+            @CookieValue(name = REFRESH_COOKIE,  required = false) String oldRefreshToken /*@RequestBody RefreshToken refreshToken*/
             ){
+        JwtAuthentication token = userService.refreshToken(oldRefreshToken);
+        ResponseCookie cookie = buildRefreshCookie(token.refreshToken());
+
         log.info("called method refreshToken");
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.refreshToken(refreshToken));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(token);
     }
 
     @Operation(summary = "Логаут")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
-            @RequestBody RefreshToken refreshToken
+            @CookieValue(name = REFRESH_COOKIE,  required = false) String refreshToken /*@RequestBody RefreshToken refreshToken*/
             ){
-        log.info("called method logout");
         userService.logout(refreshToken);
+        ResponseCookie expired =
+                ResponseCookie.from(REFRESH_COOKIE, "")
+                        .httpOnly(true)
+                        .secure(true)
+                        .path("/auth")
+                        .maxAge(0)
+                        .build();
+
+        log.info("called method logout");
         return ResponseEntity
                 .ok()
+                .header(HttpHeaders.SET_COOKIE, expired.toString())
                 .build();
     }
 
@@ -70,8 +91,18 @@ public class AuthController {
 
         log.info("called method getCurrentUser");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(userService.getCurrentUser(userDetails));
+    }
+
+    private ResponseCookie buildRefreshCookie(String value){
+        return ResponseCookie.from(REFRESH_COOKIE, value)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/auth")
+                .maxAge(refreshTtl)
+                .build();
     }
 
 }
