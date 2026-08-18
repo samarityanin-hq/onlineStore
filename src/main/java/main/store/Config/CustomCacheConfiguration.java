@@ -1,6 +1,7 @@
 package main.store.Config;
 
 import main.store.DTO.Response.ProductOut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +12,14 @@ import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
+import java.util.Date;
+
 @Configuration
 @EnableCaching
 public class CustomCacheConfiguration {
+
+    private Duration ttl = Duration.ofMinutes(20);
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration(){
@@ -23,6 +29,7 @@ public class CustomCacheConfiguration {
 
         return RedisCacheConfiguration
                 .defaultCacheConfig()
+                .entryTtl(ttl)
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair
                                 .fromSerializer(new StringRedisSerializer())

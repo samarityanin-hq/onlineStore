@@ -33,7 +33,7 @@ public class ProductController {
 
         log.info("called method getProduct");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(productService.getProduct(title));
     }
 
@@ -42,7 +42,7 @@ public class ProductController {
     public ResponseEntity<List<CategoryOut>> getCategory(){
         log.info("called method getCategories");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(productService.getCategories());
     }
 
@@ -54,7 +54,7 @@ public class ProductController {
     ){
         log.info("called method getProductsByCategory");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(productService.sortByCategory(categoryName, pageable));
     }
 
@@ -65,7 +65,7 @@ public class ProductController {
     ){
         log.info("called method getCatalog");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(productService.getProductsCatalog(pageable));
     }
 

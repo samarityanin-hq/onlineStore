@@ -32,7 +32,7 @@ public class CartController {
         cartService.addToCart(productId, userDetails);
         log.info("called method addCartItem");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .build();
     }
 
@@ -43,7 +43,7 @@ public class CartController {
 
         log.info("called method showCartItems");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(cartService.showCartItems(userDetails));
 
     }
@@ -55,7 +55,7 @@ public class CartController {
 
         log.info("called method clearCart");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(cartService.clear(userDetails));
     }
 
@@ -67,7 +67,7 @@ public class CartController {
     ){
         log.info("called method decrementCartPosition");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(cartService.decrementCartPosition(productId, userDetails));
     }
 
@@ -79,7 +79,7 @@ public class CartController {
     ){
         log.info("called method deleteCartPosition");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(cartService.deleteCartPosition(itemId, userDetails));
     }
 

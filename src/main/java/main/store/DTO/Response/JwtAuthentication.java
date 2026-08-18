@@ -2,7 +2,7 @@ package main.store.DTO.Response;
 
 
 public record JwtAuthentication(
-        String token,
+        String accessToken,
         String refreshToken
 ) {
 }

@@ -32,7 +32,8 @@ public class RegistrationController {
             @Valid @RequestBody UserRegistration user
     ){
         log.info("called method createUser");
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(userService.createUser(user));
     }
 }

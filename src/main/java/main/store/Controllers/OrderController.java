@@ -47,7 +47,7 @@ public class OrderController{
             @PathVariable long orderId){
         log.info("called method pay");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(orderService.pay(payment, orderId,userDetails));
     }
 
@@ -58,7 +58,7 @@ public class OrderController{
     ){
         log.info("called method getOrders");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(orderService.getOrders(userDetails));
     }
 

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import main.store.DTO.Request.UserCredentials;
+import main.store.DTO.Response.AccessToken;
 import main.store.DTO.Response.JwtAuthentication;
 import main.store.DTO.Response.UserOut;
 import main.store.Security.CustomUserDetails;
@@ -35,32 +36,32 @@ public class AuthController {
 
     @Operation(summary = "Логин юзера")
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthentication> login(
+    public ResponseEntity<AccessToken> login(
             @Valid @RequestBody UserCredentials credentials
     ){
-        JwtAuthentication token = userService.login(credentials);
-        ResponseCookie cookie = buildRefreshCookie(token.refreshToken());
+        JwtAuthentication tokens = userService.login(credentials);
+        ResponseCookie cookie = buildRefreshCookie(tokens.refreshToken());
 
         log.info("Called method login");
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(token);
+                .body(new AccessToken(tokens.accessToken()));
     }
 
     @Operation(summary = "Обновить токен")
     @PostMapping("/refreshToken")
-    public ResponseEntity<JwtAuthentication> refreshToken(
+    public ResponseEntity<AccessToken> refreshToken(
             @CookieValue(name = REFRESH_COOKIE,  required = false) String oldRefreshToken /*@RequestBody RefreshToken refreshToken*/
             ){
-        JwtAuthentication token = userService.refreshToken(oldRefreshToken);
-        ResponseCookie cookie = buildRefreshCookie(token.refreshToken());
+        JwtAuthentication tokens = userService.refreshToken(oldRefreshToken);
+        ResponseCookie cookie = buildRefreshCookie(tokens.refreshToken());
 
         log.info("called method refreshToken");
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(token);
+                .body(new AccessToken(tokens.accessToken()));
     }
 
     @Operation(summary = "Логаут")

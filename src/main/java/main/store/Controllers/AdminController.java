@@ -33,7 +33,7 @@ public class AdminController {
     public ResponseEntity<List<CategoryOut>> getCategories(){
         log.info("called admin method getCategories");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(adminService.getCategories());
     }
 
@@ -55,7 +55,7 @@ public class AdminController {
             @Valid @RequestBody ProductToUpdate newInfo) {
         log.info("called method updateProduct");
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(adminService.updateProduct(productId, newInfo));
     }
 
@@ -74,12 +74,12 @@ public class AdminController {
     @Operation(summary = "Повысить обычного юзера до админа")
     @PostMapping("/users/promoteToAdmin")
     public ResponseEntity<Void> promoteToAdmin(
-            @RequestBody UserToAdmin user
+            @Valid @RequestBody UserToAdmin user
             ){
         log.info("called method promoteToAdmin");
         adminService.promoteToAdmin(user);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .build();
     }
 
