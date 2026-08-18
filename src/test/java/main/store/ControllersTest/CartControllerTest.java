@@ -1,26 +1,13 @@
 package main.store.ControllersTest;
 
-import main.store.Config.JwtService;
-import main.store.Config.RateLimiter;
 import main.store.Controllers.CartController;
-import main.store.DTO.Response.JwtAuthentication;
-import main.store.Entities.User;
-import main.store.Enums.UserRole;
-import main.store.Security.JwtFilter;
-import main.store.Security.SecurityConfig;
 import main.store.Services.CartService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CartController.class)
-public class CartControllerTest extends AbstractWebTests{
+public class CartControllerTest extends AbstractWebTest {
 
     @MockitoBean
     private CartService cartService;

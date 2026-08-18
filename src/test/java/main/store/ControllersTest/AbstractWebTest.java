@@ -22,7 +22,7 @@ import java.util.Collections;
 import static org.mockito.Mockito.*;
 
 @Import({SecurityConfig.class, JwtFilter.class})
-public abstract class AbstractWebTests {
+public abstract class AbstractWebTest {
     @Autowired
     protected MockMvc mockMvc;
 

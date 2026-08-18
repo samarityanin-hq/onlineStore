@@ -1,7 +1,5 @@
 package main.store.ControllersTest;
 
-import main.store.Config.JwtService;
-import main.store.Config.RateLimiter;
 import main.store.Controllers.OrderController;
 import main.store.Exceptions.CustomExceptions.EmptyCartException;
 import main.store.Exceptions.CustomExceptions.InvalidPaymentAmountException;
@@ -13,22 +11,16 @@ import main.store.DTO.Response.OrderItemOut;
 import main.store.DTO.Response.PaymentResponse;
 import main.store.Enums.Status;
 import main.store.Security.CustomUserDetails;
-import main.store.Security.UserDetailService;
 import main.store.Services.OrderService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(OrderController.class)
-public class OrderControllerTest extends AbstractWebTests{
+public class OrderControllerTest extends AbstractWebTest {
     @Autowired
     protected MockMvc mockMvc;
 
