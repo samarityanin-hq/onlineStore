@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.UUID;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -62,6 +64,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> handleAuthenticationExc(AuthenticationException e){
+        log.error(exceptionStr, e);
+        return ResponseEntity
+                .status(401)
+                .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ExceptionResponse> handleAuthenticationExc(InvalidTokenException e){
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(401)
@@ -135,10 +145,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleGenericExc(Exception e){
+        String errorId = UUID.randomUUID().toString();
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(500)
-                .body(new ExceptionResponse(500, HttpCodeResponse.InternalServerError.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(500, HttpCodeResponse.InternalServerError.getCode(),
+                        "Internal server error: " + errorId));
     }
 
 
