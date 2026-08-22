@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-01-order-expiration-index
+      author: Ilya
+      changes:
+        - createIndex:
+            tableName: orders
+            indexName: idx_orders_status_expires_at
+            columns:
+              - column: { name: status }
+              - column: { name: expires_at }

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-01-order-expiration
+      author: Ilya
+      changes:
+        addColumn:
+          tableName: orders
+          column: {name: expires_at, type: TIMESTAMP}
