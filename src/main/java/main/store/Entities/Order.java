@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.store.Enums.Status;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,10 +38,13 @@ public class Order {
     private Integer totalOrderItems;
 
     @Column(name = "created_at")
-    LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
     @Column(name = "paid_at")
-    LocalDateTime payDate;
+    private LocalDateTime payDate;
+
+    @Column(name = "expires_at")
+    private LocalDateTime expires_at;
 
     public Order(){}
     public Order(User user, Status status, BigDecimal totalPrice, Integer totalOrderItems){
@@ -49,6 +53,7 @@ public class Order {
         this.totalPrice = totalPrice;
         this.totalOrderItems = totalOrderItems;
         this.dateTime = LocalDateTime.now();
+        this.expires_at = this.dateTime.plusMinutes(30);
     }
 
 
