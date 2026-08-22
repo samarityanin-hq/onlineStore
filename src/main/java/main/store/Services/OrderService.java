@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +94,22 @@ public class OrderService {
                 userDetails.getUsername(),
                 order.getTotalPrice(),
                 order.getPayDate());
+    }
+
+    @Transactional
+    public void canselExpiredOrder(Long orderId){
+        Optional<Order> order = orderRepo.findById(orderId);
+
+        if (order.isEmpty() || order.get().getStatus() != Status.CREATED){
+            return;
+        }
+
+        List<OrderItem> orderItems = orderRepo.findOrderItemsById(orderId);
+        for (OrderItem oi: orderItems){
+            Product product = oi.getItem();
+            product.setStorageQuantity(product.getStorageQuantity() + oi.getItemQuantity());
+        }
+        order.get().setStatus(Status.CANCELED);
     }
 
     private OrderItemOut convertToItemsOut(OrderItem item){
