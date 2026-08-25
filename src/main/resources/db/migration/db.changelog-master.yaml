@@ -11,3 +11,6 @@ databaseChangeLog:
   - include:
       file: db/migration/changes/004-order-expiration-index.yaml
       relativeToChangelogFile: false
+  - include:
+      file: db/migration/changes/005-cart-item-constraint.yaml
+      relativeToChangelogFile: false

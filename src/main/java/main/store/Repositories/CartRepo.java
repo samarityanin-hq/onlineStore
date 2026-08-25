@@ -35,5 +35,16 @@ public interface CartRepo extends JpaRepository<CartItem, Long> {
     
     void deleteAllByUser_Id(Long userId);
 
+    @Modifying
+    @Query(value = """
+    INSERT INTO cart_items (id, user_id, product_id, quantity, position_cost)
+    VALUES (nextval('cart_item_sequence'), :userId, :productId, 1,
+            (SELECT price FROM products WHERE id = :productId))
+    ON CONFLICT (user_id, product_id)
+    DO UPDATE SET quantity = cart_items.quantity + 1,
+                  position_cost = (cart_items.quantity + 1) * (SELECT price FROM products WHERE id = :productId)
+    """, nativeQuery = true)
+    void upsertCartItem(@Param("userId") Long userId, @Param("productId") Long productId);
+
 
 }

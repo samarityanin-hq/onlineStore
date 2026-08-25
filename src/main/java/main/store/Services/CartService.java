@@ -22,19 +22,17 @@ import java.util.List;
 public class CartService {
 
     private final CartRepo cartRepo;
-    private final UserRepo userRepo;
-    private final ProductRepo productRepo;
 
     @Transactional
     public void addToCart(long productId, CustomUserDetails userDetails) {
-        Product product = productRepo.getReferenceById(productId);
-        User user = userRepo.getReferenceById(userDetails.getId());
 
-        CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
+        cartRepo.upsertCartItem(userDetails.getId(), productId);
+
+        /*CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
                 .orElseGet(() -> new CartItem(user, product, 0));
 
         cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
-        cartRepo.save(cartItem);
+        cartRepo.save(cartItem);*/
 
     }
 

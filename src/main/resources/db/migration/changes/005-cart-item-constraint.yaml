@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-01-cart-item-constraint
+      author: Ilya
+      changes:
+        - addUniqueConstraint:
+            tableName: cart_items
+            columnNames: user_id, product_id
+            constraintName: uq_cart_items_user_product
