@@ -1,6 +1,5 @@
 package main.store.Config;
 
-import main.store.DTO.Response.ProductOut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -8,28 +7,37 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 
 import java.time.Duration;
-import java.util.Date;
 
 @Configuration
 @EnableCaching
 public class CustomCacheConfiguration {
 
-    private Duration ttl = Duration.ofMinutes(20);
+    @Value("${redis.cache-tll}")
+    private Duration cacheTtl;
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration(){
+        PolymorphicTypeValidator validator =
+                BasicPolymorphicTypeValidator.builder()
+                        .allowIfBaseType(java.math.BigDecimal.class)
+                        .allowIfBaseType("main.store.DTO.Response.")
+                        .build();
 
-        JacksonJsonRedisSerializer<ProductOut> serializer =
-                new JacksonJsonRedisSerializer<>(ProductOut.class);
+        GenericJacksonJsonRedisSerializer serializer =
+                GenericJacksonJsonRedisSerializer.builder()
+                        .enableDefaultTyping(validator)
+                        .build();
 
         return RedisCacheConfiguration
                 .defaultCacheConfig()
-                .entryTtl(ttl)
+                .entryTtl(cacheTtl)
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair
                                 .fromSerializer(new StringRedisSerializer())
