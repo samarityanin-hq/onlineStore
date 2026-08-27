@@ -4,8 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import main.store.DTO.Request.NewCategory;
 import main.store.DTO.Request.ProductToUpdate;
-import main.store.DTO.Request.ProductToAdd;
+import main.store.DTO.Request.NewProduct;
 import main.store.DTO.Request.UserToAdmin;
 import main.store.DTO.Response.CategoryOut;
 import main.store.DTO.Response.ProductOut;
@@ -37,10 +38,33 @@ public class AdminController {
                 .body(adminService.getCategories());
     }
 
+    @Operation(summary = "Создать категорию")
+    @PostMapping("/products/createCategory")
+    public ResponseEntity<Void> createCategory(
+            @Valid @RequestBody NewCategory newCategory
+            ){
+        log.info("called method create category");
+        adminService.createCategory(newCategory);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @Operation(summary = "Обновить название категории")
+    @PatchMapping("products/updateCategoryName/{categoryId}")
+    public ResponseEntity<CategoryOut> updateCategoryName(
+            @PathVariable Long categoryId,
+            @RequestBody NewCategory newCategory){
+        log.info("called method updateCategory");
+        return ResponseEntity
+                .ok()
+                .body(adminService.updateCategoryName(categoryId, newCategory));
+    }
+
     @Operation(summary = "Добавить продукт")
     @PostMapping("/products/createProduct")
     public ResponseEntity<Void> addProduct(
-            @Valid @RequestBody ProductToAdd product){
+            @Valid @RequestBody NewProduct product){
         log.info("called admin method addProduct");
         adminService.addProduct(product);
         return ResponseEntity

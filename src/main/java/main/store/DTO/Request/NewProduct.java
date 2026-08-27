@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
-public record ProductToAdd(
+public record NewProduct(
         @NotBlank(message = "product title cannot be empty")
         @Size(max = 30, message = "title is to long")
         String title,

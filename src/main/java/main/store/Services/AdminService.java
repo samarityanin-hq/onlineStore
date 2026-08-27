@@ -2,8 +2,10 @@ package main.store.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import main.store.DTO.Request.ProductToAdd;
+import main.store.DTO.Request.NewCategory;
+import main.store.DTO.Request.NewProduct;
 import main.store.DTO.Request.ProductToUpdate;
 import main.store.DTO.Request.UserToAdmin;
 import main.store.DTO.Response.CategoryOut;
@@ -34,7 +36,7 @@ public class AdminService {
     private final CacheManager cacheManager;
 
 
-    public void addProduct(ProductToAdd product){
+    public void addProduct(NewProduct product){
         Category category = categoryRepo.getReferenceById(product.categoryId());
         Product newProduct = new Product(product, category);
         productRepo.save(newProduct);
@@ -43,6 +45,23 @@ public class AdminService {
     public List<CategoryOut> getCategories() {
         return categoryRepo.getAllCategories();
     }
+
+    public void createCategory(@Valid NewCategory newCategory) {
+        Category category = new Category();
+        category.setName(newCategory.categoryName());
+        categoryRepo.save(category);
+    }
+
+    @Transactional
+    public CategoryOut updateCategoryName(Long categoryId, NewCategory newCategory) {
+        Optional<Category> category = Optional.of(categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("category with id: %s not found", categoryId))));
+        category.get().setName(newCategory.categoryName());
+
+        return new CategoryOut(categoryId,
+                newCategory.categoryName());
+    }
+
 
     @Transactional
     public void promoteToAdmin(UserToAdmin userToAdmin) {

@@ -13,4 +13,5 @@ public interface CategoryRepo extends JpaRepository<Category, Long> {
     FROM Category c
     """)
     List<CategoryOut> getAllCategories();
+
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import main.store.DTO.Request.ProductToAdd;
+import main.store.DTO.Request.NewProduct;
 
 import java.math.BigDecimal;
 
@@ -38,7 +38,7 @@ public class Product {
     private Category category;
 
     public Product(){}
-    public Product(ProductToAdd product, Category category){
+    public Product(NewProduct product, Category category){
         title = product.title();
         price = product.price();
         storageQuantity = product.quantity();
