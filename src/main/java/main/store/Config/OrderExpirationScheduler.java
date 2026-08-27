@@ -2,6 +2,7 @@ package main.store.Config;
 
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import main.store.Entities.Order;
 import main.store.Enums.Status;
 import main.store.Repositories.OrderRepo;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderExpirationScheduler {
@@ -23,8 +25,9 @@ public class OrderExpirationScheduler {
 
         for (Order order: expired){
             try {
-                orderService.canselExpiredOrder(order.getId());
+                orderService.cancelExpiredOrder(order.getId());
             } catch (OptimisticLockException e) {
+                log.warn(e.getMessage());
             }
         }
     }

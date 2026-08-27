@@ -24,7 +24,7 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     """)
     List<OrderOut> getOrdersByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT o FROM Order o WHERE o.status = :status AND o.expires_at < :now")
+    @Query("SELECT o FROM Order o WHERE o.status = :status AND o.expiresAt <= :now")
     List<Order> findExpiredOrders(@Param("status")Status status, @Param("now")LocalDateTime now);
 
     @Query("SELECT oi FROM OrderItem oi JOIN FETCH oi.item WHERE oi.order.id =:orderId")

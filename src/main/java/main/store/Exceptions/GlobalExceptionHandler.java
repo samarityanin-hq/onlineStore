@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> handleIllegalArgExc(IllegalArgumentException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
                 .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), e.getMessage()));
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(java.util.stream.Collectors.joining("; "));
 
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
                 .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), errorFields));
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentMismatchExc(MethodArgumentTypeMismatchException e){
         String message = String.format("Param %s must be number", e.getName());
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
                 .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), message));
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleBadCredentialsExc(BadCredentialsException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
                 .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> handleAuthenticationExc(AuthenticationException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
                 .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ExceptionResponse> handleAuthenticationExc(InvalidTokenException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
                 .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionResponse> handleAccessDeniedExc(AccessDeniedException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(403)
                 .body(new ExceptionResponse(403, HttpCodeResponse.Forbidden.getCode(), e.getMessage()));
@@ -88,15 +88,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEntityNotFoundExc(EntityNotFoundException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(404)
-                .body(new ExceptionResponse(404, HttpCodeResponse.NotFoud.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(404, HttpCodeResponse.NotFound.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsExc(UserAlreadyExistsException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
@@ -104,7 +104,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductOutOfStockException.class)
     public ResponseEntity<ExceptionResponse> handleProductOutOfStockExc(ProductOutOfStockException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
@@ -112,7 +112,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OrderAlreadyPaidException.class)
     public ResponseEntity<ExceptionResponse> handleOrderAlreadyPaidExc(OrderAlreadyPaidException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPaymentAmountException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidPaymentAmountExc(InvalidPaymentAmountException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
@@ -128,7 +128,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmptyCartException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyCartExc(EmptyCartException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
@@ -136,7 +136,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OptimisticLockException.class)
     public ResponseEntity<ExceptionResponse> handleOptimisticLockExc(OptimisticLockException e){
-        log.error(exceptionStr, e);
+        log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
                 .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(),

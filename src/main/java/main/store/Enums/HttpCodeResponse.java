@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum HttpCodeResponse {
     Conflict("Conflict"),
     BadRequest("Bad Request"),
-    NotFoud("Not Found"),
+    NotFound("Not Found"),
     InternalServerError("Internal Server Error"),
     Forbidden("Forbidden"),
     Unauthorized("Unauthorized");

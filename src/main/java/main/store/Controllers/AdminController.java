@@ -51,10 +51,10 @@ public class AdminController {
     }
 
     @Operation(summary = "Обновить название категории")
-    @PatchMapping("products/updateCategoryName/{categoryId}")
+    @PatchMapping("/products/updateCategoryName/{categoryId}")
     public ResponseEntity<CategoryOut> updateCategoryName(
             @PathVariable Long categoryId,
-            @RequestBody NewCategory newCategory){
+            @Valid @RequestBody NewCategory newCategory){
         log.info("called method updateCategory");
         return ResponseEntity
                 .ok()

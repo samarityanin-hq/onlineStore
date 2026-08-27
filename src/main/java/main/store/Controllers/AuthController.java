@@ -52,7 +52,7 @@ public class AuthController {
     @Operation(summary = "Обновить токен")
     @PostMapping("/refreshToken")
     public ResponseEntity<AccessToken> refreshToken(
-            @CookieValue(name = REFRESH_COOKIE,  required = false) String oldRefreshToken /*@RequestBody RefreshToken refreshToken*/
+            @CookieValue(name = REFRESH_COOKIE,  required = false) String oldRefreshToken
             ){
         JwtAuthentication tokens = userService.refreshToken(oldRefreshToken);
         ResponseCookie cookie = buildRefreshCookie(tokens.refreshToken());
@@ -67,7 +67,7 @@ public class AuthController {
     @Operation(summary = "Логаут")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
-            @CookieValue(name = REFRESH_COOKIE,  required = false) String refreshToken /*@RequestBody RefreshToken refreshToken*/
+            @CookieValue(name = REFRESH_COOKIE,  required = false) String refreshToken
             ){
         userService.logout(refreshToken);
         ResponseCookie expired =

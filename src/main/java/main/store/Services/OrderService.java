@@ -97,7 +97,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void canselExpiredOrder(Long orderId){
+    public void cancelExpiredOrder(Long orderId){
         Optional<Order> order = orderRepo.findById(orderId);
 
         if (order.isEmpty() || order.get().getStatus() != Status.CREATED){

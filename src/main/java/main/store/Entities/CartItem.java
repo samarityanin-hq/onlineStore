@@ -37,11 +37,11 @@ public class CartItem {
     private BigDecimal positionCost;
 
     public CartItem(){}
-    public CartItem(User user, Product item, Integer itemQuantity){
+    public CartItem(User user, Product product, Integer itemQuantity){
         this.user = user;
-        this.item = item;
+        this.item = product;
         this.itemQuantity = itemQuantity;
-        this.positionCost = item.getPrice();
+        this.positionCost = product.getPrice();
     }
 
     private void calculatePositionCost(){

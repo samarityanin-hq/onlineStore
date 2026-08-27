@@ -2,9 +2,7 @@ package main.store.Entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import main.store.DTO.Request.NewProduct;
 
 import java.math.BigDecimal;
@@ -12,6 +10,8 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "products")
 public class Product {
@@ -37,12 +37,5 @@ public class Product {
     @JoinColumn(name = "category")
     private Category category;
 
-    public Product(){}
-    public Product(NewProduct product, Category category){
-        title = product.title();
-        price = product.price();
-        storageQuantity = product.quantity();
-        this.category = category;
-    }
 
 }

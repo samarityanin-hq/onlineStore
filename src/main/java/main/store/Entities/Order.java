@@ -44,7 +44,7 @@ public class Order {
     private LocalDateTime payDate;
 
     @Column(name = "expires_at")
-    private LocalDateTime expires_at;
+    private LocalDateTime expiresAt;
 
     public Order(){}
     public Order(User user, Status status, BigDecimal totalPrice, Integer totalOrderItems){
@@ -53,7 +53,7 @@ public class Order {
         this.totalPrice = totalPrice;
         this.totalOrderItems = totalOrderItems;
         this.dateTime = LocalDateTime.now();
-        this.expires_at = this.dateTime.plusMinutes(30);
+        this.expiresAt = this.dateTime.plusMinutes(30);
     }
 
 

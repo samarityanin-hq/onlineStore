@@ -38,7 +38,12 @@ public class AdminService {
 
     public void addProduct(NewProduct product){
         Category category = categoryRepo.getReferenceById(product.categoryId());
-        Product newProduct = new Product(product, category);
+        Product newProduct = Product.builder()
+                .title(product.title())
+                .price(product.price())
+                .storageQuantity(product.quantity())
+                .category(category)
+                .build();
         productRepo.save(newProduct);
     }
 

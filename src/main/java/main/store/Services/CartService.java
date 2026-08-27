@@ -7,11 +7,8 @@ import main.store.DTO.Response.CartItemsOut;
 import main.store.DTO.Response.ItemOut;
 import main.store.Entities.CartItem;
 import main.store.Security.CustomUserDetails;
-import main.store.Entities.Product;
-import main.store.Entities.User;
 import main.store.Repositories.CartRepo;
-import main.store.Repositories.ProductRepo;
-import main.store.Repositories.UserRepo;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,15 +22,11 @@ public class CartService {
 
     @Transactional
     public void addToCart(long productId, CustomUserDetails userDetails) {
-
-        cartRepo.upsertCartItem(userDetails.getId(), productId);
-
-        /*CartItem cartItem = cartRepo.getByItem_IdAndUser_Id(productId, userDetails.getId())
-                .orElseGet(() -> new CartItem(user, product, 0));
-
-        cartItem.setItemQuantity(cartItem.getItemQuantity()+1);
-        cartRepo.save(cartItem);*/
-
+        try {
+            cartRepo.upsertCartItem(userDetails.getId(), productId);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityNotFoundException(String.format("Product with id: %d not found", productId));
+        }
     }
 
     public CartItemsOut showCartItems(CustomUserDetails userDetails) {
