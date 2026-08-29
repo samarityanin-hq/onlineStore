@@ -6,7 +6,9 @@ import lombok.Getter;
 public enum Status {
     CREATED("CREATED"),
     PAID("PAID"),
-    CANCELED("CANCELED");
+    CANCELED("CANCELED"),
+    ON_THE_WAY("ON_THE_WAY"),
+    SHIPPED("SHIPPED");
 
     private final String status;
 
