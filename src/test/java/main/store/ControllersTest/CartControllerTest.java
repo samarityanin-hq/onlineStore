@@ -60,7 +60,7 @@ public class CartControllerTest extends AbstractWebTest {
                         .param("productId", "1")
                         .header("Authorization", "Bearer invalid-access-token"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.error").value("Required authorization"));
+                .andExpect(jsonPath("$.message").value("Required authorization"));
 
         verify(cartService, never()).addToCart(eq(1L), any());
     }

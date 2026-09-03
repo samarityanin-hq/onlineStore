@@ -50,6 +50,7 @@ public abstract class AbstractWebTest {
         JwtAuthentication jwt = new JwtAuthentication(accessToken, refreshToken);
         when(jwtService.generateAuthToken(any(User.class))).thenReturn(jwt);
         when(jwtService.validateJwtToken(accessToken)).thenReturn(true);
+        when(jwtService.isAccessToken(accessToken)).thenReturn(true);
         when(jwtService.validateJwtToken("invalid-access-token")).thenReturn(false);
         when(jwtService.getEmailFromToken(accessToken)).thenReturn("user@email.com");
 
