@@ -3,10 +3,10 @@ package main.store.Exceptions;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import main.store.DTO.Response.ExceptionResponse;
-import main.store.Enums.HttpCodeResponse;
 import main.store.Exceptions.CustomExceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +30,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
-                .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(400,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,7 +44,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
-                .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), errorFields));
+                .body(new ExceptionResponse(400,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        errorFields));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -51,7 +55,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(400)
-                .body(new ExceptionResponse(400, HttpCodeResponse.BadRequest.getCode(), message));
+                .body(new ExceptionResponse(400,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        message));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -59,7 +65,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
-                .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -67,7 +75,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
-                .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(InvalidTokenException.class)
@@ -75,7 +85,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(401)
-                .body(new ExceptionResponse(401, HttpCodeResponse.Unauthorized.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -83,7 +95,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(403)
-                .body(new ExceptionResponse(403, HttpCodeResponse.Forbidden.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(403,
+                        HttpStatus.FORBIDDEN.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -91,7 +105,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(404)
-                .body(new ExceptionResponse(404, HttpCodeResponse.NotFound.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(404,
+                        HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -99,7 +115,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(ProductOutOfStockException.class)
@@ -107,7 +125,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(OrderAlreadyPaidException.class)
@@ -115,7 +135,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(InvalidPaymentAmountException.class)
@@ -123,7 +145,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(EmptyCartException.class)
@@ -131,7 +155,9 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(), e.getMessage()));
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(OptimisticLockException.class)
@@ -139,8 +165,19 @@ public class GlobalExceptionHandler {
         log.warn(exceptionStr, e);
         return ResponseEntity
                 .status(409)
-                .body(new ExceptionResponse(409, HttpCodeResponse.Conflict.getCode(),
+                .body(new ExceptionResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
                         "The item was just purchased, please try placing your order again."));
+    }
+
+    @ExceptionHandler(TooManyRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleToManyRequestExc(TooManyRequestException e){
+        log.warn(exceptionStr, e);
+        return ResponseEntity
+                .status(429)
+                .body(new ExceptionResponse(429,
+                        HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase(),
+                        e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -149,7 +186,8 @@ public class GlobalExceptionHandler {
         log.error(exceptionStr, e);
         return ResponseEntity
                 .status(500)
-                .body(new ExceptionResponse(500, HttpCodeResponse.InternalServerError.getCode(),
+                .body(new ExceptionResponse(500,
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                         "Internal server error: " + errorId));
     }
 
