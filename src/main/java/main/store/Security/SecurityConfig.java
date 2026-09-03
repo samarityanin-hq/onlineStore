@@ -1,11 +1,13 @@
 package main.store.Security;
 
 import lombok.RequiredArgsConstructor;
+import main.store.DTO.Response.ExceptionResponse;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,6 +24,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final RateLimiterFilter rateLimiterFilter;
+    private final ObjectMapper mapper;
 
     @Bean
     public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter jwtFilter) {
@@ -103,7 +107,14 @@ public class SecurityConfig {
                         ex.authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
                             response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("{\"error\": \"Required authorization\"}");
+                            ExceptionResponse excpResponse = new ExceptionResponse(
+                                    HttpStatus.UNAUTHORIZED.value(),
+                                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                                    "Required authorization"
+                                    );
+                            String json = mapper.writeValueAsString(excpResponse);
+                            response.getWriter().write(json);
+
                         })
             );
     return http.build();
